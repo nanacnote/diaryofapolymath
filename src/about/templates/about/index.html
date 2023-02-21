@@ -1,0 +1,51 @@
+{% extends "base/base.html" %}
+
+{% block title %}About{% endblock %}
+
+{% block content %}
+<section style="margin-top: 6.5em;">
+    <figure>
+      <img
+        src="{{ profile.image_base64_url }}"
+        alt="{{ profile.image_base64_alt }}"
+        title="{{ profile.image_base64_title }}"
+        width="185px"
+        height="185px"
+        style="
+          border-radius: 50%;
+          margin: auto;
+          display: block;
+          "
+      />
+      <figcaption style="margin: 1.25em auto;">{{ profile.name }}</figcaption>
+    </figure>
+</section>
+<section style="text-align: center;">
+  {% for link in links %}
+    <span>
+      <a class="no-hover-bg" href="{{ link.link_icon_href }}">
+        <img
+          src="{{ link.link_icon_base64_url }}"
+          alt="{{ link.link_icon_alt }}"
+          title="{{ link.link_icon_title }}"
+          width="32px"
+          height="32px"
+        />
+      </a>
+    </span>
+  {% endfor %}
+</section>
+<section style="margin-top: 2.5em;">
+  <div class="default-timeline">
+    {% for timeline in timelines %}
+      <div class="default-card">
+        <header style="text-align: left;">{{ timeline.header }}</header>
+        <div>
+          {{timeline.content}}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+  <br />
+</section>
+{% endblock %}

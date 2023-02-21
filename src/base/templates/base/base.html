@@ -1,0 +1,45 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'base/css/terminal.css' %}" />
+    <!-- TODO: implement detailed head -->
+    <title>{% block title %}{% endblock %}</title>
+  </head>
+  <body class="default container container-fluid">
+    <section>
+      <div class="default-nav">
+        <div class="default-logo">
+          <div class="logo default-prompt"><a href="{% url 'about:index' %}" class="no-style">Diary of a Polymath</a></div>
+        </div>
+        <nav class="default-menu">
+          <ul>
+            <li><a class="{% if 'about/' in request.resolver_match.route%} active {% endif %}" href="{% url 'about:index' %}">About</a></li>
+            <li><a class="{% if 'blog/' in request.resolver_match.route%} active {% endif %}" href="{% url 'blog:index' %}">Blog</a></li>
+            <li><a class="{% if 'projects/' in request.resolver_match.route%} active {% endif %}" href="{% url 'projects:index' %}">Projects</a></li>
+          </ul>
+        </nav>
+      </div>
+    </section>
+    {% block content %}{% endblock %}
+    <section>
+      <hr/>
+      <div style="display:flex; flex-wrap: wrap;">
+        <span>
+          © {% now "Y" %} | 
+          <a href="https://creativecommons.org/publicdomain/zero/1.0/" target="_blank" rel="noopener noreferrer"> CC0 1.0 Universal</a>
+        </span>
+        <span style="flex: 1; padding: 1em 0;"></span>
+        <span>
+          <a href="https://github.com/nanacnote/diaryofapolymath" target="_blank" rel="noopener noreferrer">Codebase</a> |
+          Powered by <a href="https://www.djangoproject.com/" target="_blank" rel="noopener noreferrer">django</a>
+        </span>
+
+      </div>
+      <hr style="opacity: 0; margin-bottom: 0;"/>
+    </section>
+  </body>
+  </html>

@@ -3,5 +3,16 @@
 {% block title %}Blog{% endblock %}
 
 {% block content %}
-  Blog/Post
+  <div>
+    <h1>
+      <span>{{ post.title }}</span>
+      <span style="color: var(--secondary-color);"> | </span>
+      <span style="color: var(--secondary-color);">{{ post.subtitle }}</span> </h1>
+    <p style="color: var(--secondary-color);">{{ post.published_on|date:"F Y" }}</p>
+    {% for tag in post.tags.all %}
+      <a href="{% url 'blog:tag' tag.name|slugify %}">{{ tag.name }}</a>
+      {% if not forloop.last %} • {% endif %}
+    {% endfor %}
+    <div style="margin-top: 1em; text-align: justify;">{{post.body}}</div>
+  </div>
 {% endblock %}

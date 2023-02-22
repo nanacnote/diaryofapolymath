@@ -3,7 +3,7 @@
 {% block title %}About{% endblock %}
 
 {% block content %}
-<section style="margin-top: 6.5em;">
+<section>
     <figure>
       <img
         src="{{ profile.image_base64_url }}"
@@ -36,12 +36,12 @@
   {% endfor %}
 </section>
 <section style="margin-top: 2.5em;">
-  <div class="default-timeline">
+  <div class="terminal-timeline">
     {% for timeline in timelines %}
-      <div class="default-card">
+      <div class="terminal-card">
         <header style="text-align: left;">{{ timeline.header }}</header>
         <div>
-          {{timeline.content}}
+          {{timeline.body}}
         </div>
       </div>
     {% endfor %}

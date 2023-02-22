@@ -26,7 +26,7 @@ class Timeline(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     modified_on = models.DateTimeField(auto_now_add=True)
     header = models.CharField(max_length=120, unique=True)
-    content = models.TextField()
+    body = models.TextField()
 
     def __str__(self):
         return self.header

@@ -784,15 +784,15 @@ figure > figcaption {
   grid-template-rows: auto;
 }
 @media only screen and (min-width: 40em) {
-  .components-grid {
+  .components-grid.show-aside {
     grid-template-columns: 9fr 3fr;
   }
 }
-.components-grid.hide-aside {
-  display: block;
-}
-.components-grid.hide-aside aside {
+.components-grid aside {
   display: none;
+}
+.components-grid.show-aside aside {
+  display: block;
 }
 #theme-switch input {
   display: none;
@@ -800,6 +800,5 @@ figure > figcaption {
 #theme-switch label::before {
   content: var(--switch-icon);
   font-size: 1.25em;
-  margin-left: 1em;
   cursor: pointer;
 }

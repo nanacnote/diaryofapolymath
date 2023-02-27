@@ -21,6 +21,6 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("about/", include(("about.urls", "about"), namespace="about")),
     path("blog/", include(("blog.urls", "blog"), namespace="blog")),
-    path("projects/", include(("projects.urls", "projects"), namespace="projects")),
+    path("exclusive/", include(("exclusive.urls", "exclusive"), namespace="exclusive")),
     path("", lambda _: redirect(reverse("about:index"))),
 ]

@@ -14,5 +14,26 @@
       {% if not forloop.last %} • {% endif %}
     {% endfor %}
     <div style="margin-top: 1em; text-align: justify;">{{post.body}}</div>
+    <div style="display:flex; flex-wrap: wrap; margin-top: 2em;">
+      <span>
+        {% if post.title != prev.title %}
+          <a class="no-hover-bg btn btn-default btn-ghost" style="text-align: center; width: 175px;" href="{% url 'blog:post' prev.slug %}">
+            Previous
+            </br><br/>
+            {{prev.title|truncatechars:12}}
+          </a>
+        {% endif %}
+      </span>
+      <span style="flex: 1; padding: 1em 0;"></span>
+      <span>
+        {% if post.title != next.title %}
+          <a class="no-hover-bg btn btn-default btn-ghost" style="text-align: center; width: 175px;" href="{% url 'blog:post' next.slug %}">
+              Next
+              <br/><br/>
+              {{next.title|truncatechars:12}}
+          </a>
+        {% endif %}
+      </span>
+    </div>
   </div>
 {% endblock %}

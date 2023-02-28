@@ -21,13 +21,16 @@ def index(request):
 
 def post(request, slug):
     posts = Post.objects.all()
+    matched_post = posts.get(slug=slug)
     archives = Counter()
     for post in posts:
         archives[post.published_on.year] += 1
     payload = dict(
-        post=posts.get(slug=slug),
+        post=matched_post,
         archives=sorted(archives.items(), key=itemgetter(0)),
         tags=Tag.objects.all(),
+        prev=posts[max((*posts,).index(matched_post), 1) - 1],
+        next=posts[min((*posts,).index(matched_post) + 1, len(posts) - 1)],
     )
     return render(request, "blog/post.html", payload)
 

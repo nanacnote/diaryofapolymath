@@ -1,8 +1,9 @@
 {% extends "base/base.html" %}
 
-{% block title %}Blog{% endblock %}
+{% block title %}Blog | Tag{% endblock %}
 
 {% block content %}
+{% with title_banner="Tagged "|add:request.resolver_match.kwargs.slug %}{{ block.super }}{% endwith %}
   {% for post in posts %}
   <div>
     <h1>{{ post.title }}</h1>

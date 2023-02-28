@@ -11,6 +11,7 @@
   color: var(--invert-font-color);
 }
 body {
+  position: relative;
   font-size: var(--global-font-size);
   color: var(--font-color);
   line-height: var(--global-line-height);
@@ -792,7 +793,25 @@ figure > figcaption {
   display: none;
 }
 .components-grid.show-aside aside {
-  display: block;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+}
+.components-grid.show-aside aside div {
+  min-height: 10em;
+}
+.components-grid.show-aside aside div:nth-child(n + 2) {
+  margin-top: 2.5em;
+}
+@media only screen and (max-width: 40em) {
+  .components-grid.show-aside aside {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+  .components-grid.show-aside aside div {
+    margin-top: 2.5em;
+    margin-right: 1.5em;
+  }
 }
 #theme-switch input {
   display: none;
@@ -801,4 +820,22 @@ figure > figcaption {
   content: var(--switch-icon);
   font-size: 1.25em;
   cursor: pointer;
+}
+#title-banner {
+  position: absolute;
+  top: 90px;
+  opacity: 0.075;
+  font-weight: 800;
+  font-size: 2em;
+  letter-spacing: 7.5px;
+  text-transform: uppercase;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+@media only screen and (max-width: 30em) {
+  #title-banner {
+    top: 215px;
+  }
 }

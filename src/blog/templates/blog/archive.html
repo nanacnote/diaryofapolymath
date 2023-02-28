@@ -1,8 +1,9 @@
 {% extends "base/base.html" %}
 
-{% block title %}Blog{% endblock %}
+{% block title %}Blog | Archive{% endblock %}
 
 {% block content %}
+{% with title_banner=posts.0.published_on|date:"Y"|add:" Archive" %}{{ block.super }}{% endwith %}
   {% for post in posts %}
   <div>
     <h1>{{ post.title }}</h1>

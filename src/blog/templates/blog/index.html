@@ -3,6 +3,7 @@
 {% block title %}Blog{% endblock %}
 
 {% block content %}
+{% with title_banner='Blog' %}{{ block.super }}{% endwith %}
   {% for post in posts %}
     <div>
       <h1>{{ post.title }}</h1>

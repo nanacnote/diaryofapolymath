@@ -1,0 +1,16 @@
+{
+  "name": "diaryofapolymath",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "vite build --watch --mode ${APP_ENV}",
+    "build": "vite build --mode ${APP_ENV}"
+  },
+  "devDependencies": {
+    "vite": "^4.3.0"
+  },
+  "dependencies": {
+    "@hotwired/stimulus": "^3.2.1"
+  }
+}

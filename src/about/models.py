@@ -3,9 +3,9 @@ from django.db import models
 
 class Profile(models.Model):
     name = models.CharField(max_length=50)
-    image_base64_title = models.CharField(max_length=25)
-    image_base64_alt = models.CharField(max_length=50)
-    image_base64_url = models.TextField()
+    image_title = models.CharField(max_length=25)
+    image_alt = models.CharField(max_length=50)
+    image_src_url = models.TextField()
 
     def __str__(self):
         return self.name
@@ -13,13 +13,13 @@ class Profile(models.Model):
 
 class Link(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    link_icon_title = models.CharField(max_length=25)
-    link_icon_alt = models.CharField(max_length=50)
-    link_icon_href = models.CharField(max_length=250)
-    link_icon_base64_url = models.TextField()
+    icon_title = models.CharField(max_length=25)
+    icon_alt = models.CharField(max_length=50)
+    icon_href = models.CharField(max_length=250)
+    icon_src_url = models.TextField()
 
     def __str__(self):
-        return self.link_icon_title
+        return self.icon_title
 
 
 class Timeline(models.Model):

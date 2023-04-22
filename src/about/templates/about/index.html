@@ -6,9 +6,9 @@
 <section>
     <figure>
       <img
-        src="{{ profile.image_base64_url }}"
-        alt="{{ profile.image_base64_alt }}"
-        title="{{ profile.image_base64_title }}"
+        src="{{ profile.image_src_url }}"
+        alt="{{ profile.image_alt }}"
+        title="{{ profile.image_title }}"
         width="185px"
         height="185px"
         style="
@@ -23,11 +23,11 @@
 <section style="text-align: center;">
   {% for link in links %}
     <span>
-      <a class="no-hover-bg" href="{{ link.link_icon_href }}">
+      <a class="no-hover-bg" href="{{ link.icon_href }}">
         <img
-          src="{{ link.link_icon_base64_url }}"
-          alt="{{ link.link_icon_alt }}"
-          title="{{ link.link_icon_title }}"
+          src="{{ link.icon_src_url }}"
+          alt="{{ link.icon_alt }}"
+          title="{{ link.icon_title }}"
           width="32px"
           height="32px"
         />

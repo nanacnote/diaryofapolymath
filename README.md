@@ -2,14 +2,40 @@
 
 An extension of my mind
 
+## Requirements
+
+Node 16
+
+Python 3.9
+
+Pipenv 2021.5.29
+
 ### Setup
 
 ```
-1.  git clone https://github.com/nanacnote/diaryofapolymath.git
-2.  cd diaryofapolymath
-3.  pipenv install --dev
-4.  pipenv shell
-5.  export PYTHONPATH="$(pwd)/src"
-6.  export DJANGO_SETTINGS_MODULE="base.settings"
-7.  django-admin runserver
+git clone https://github.com/nanacnote/diaryofapolymath.git
+cd diaryofapolymath
+cp .env.example .env
+npm i
+pipenv install --dev
+chmod +x ./run
+```
+
+### Run
+
+Preferred
+
+```
+./run start:dev
+```
+
+Manual
+
+```
+pipenv shell
+export APP_ENV="development"
+export PYTHONPATH="./src"
+export DJANGO_SETTINGS_MODULE="base.settings.${APP_ENV}"
+django-admin runserver
+npm start
 ```

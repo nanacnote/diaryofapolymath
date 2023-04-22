@@ -1,8 +1,11 @@
+node_modules
+dist
+
 .vscode
 .idea
 .env
 
-**/db.sqlite3
+*.log
 
 *.pyc
 **/__pycache__/

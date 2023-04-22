@@ -1,0 +1,85 @@
+#!/bin/sh
+
+MODE=0
+
+set -e                                    # exit execution if a command fails
+set -a                                    # set marking all created and all modified variables for export
+[ ! -f ./.env ] || . ./.env               # load environment variables
+set +a                                    # unset marking variables for export
+
+
+kill_all_processes() {
+  echo "\n**Attempting a graceful shutdown**"
+
+  if [ "$MODE" -gt 0 ]; then
+    kill -15 "$PID_1" && 
+    echo "**Successfully terminated Django process [$PID_1]**"
+    kill -15 "$PID_2" &&
+    echo "**Successfully terminated Vite process [$PID_2]**"
+  fi
+
+  rm -rf local.dev.log &&
+  echo "**Successfully deleted log file at [./local.dev.log]**"
+  exit 0
+}
+
+check_pipenv_env() {
+  if command -v pipenv >/dev/null 2>&1 ; then
+    echo "Pipenv is installed!"
+    if [ -z "$(pipenv --venv)" ]; then
+        echo >&2 "Pipenv is not running in a Pipenv environment. Starting a new Pipenv shell..."
+        pipenv shell
+    else
+        echo >&2 "Pipenv is running in a Pipenv environment located at $(pipenv --venv)"
+    fi
+  else
+    echo "Pipenv is not installed. Please install Pipenv and try again."
+    exit 1
+  fi
+}
+
+check_node_version() {
+  node_version=$(node -v | cut -c 2-)
+  if [ "$(printf '%s\n' "16" "$node_version" | sort -V | head -n1)" = "16" ]; then
+    echo >&2 "Node.js version 16 or above is installed. Continuing..."
+  else
+    echo >&2 "Node.js version 16 or above is required. Exiting..."
+    exit 1
+  fi
+}
+
+check_python_version() {
+  python_version=$(python3 -c 'import platform; print(platform.python_version())')
+  if [ "$(printf '%s\n' "3.9" "$python_version" | sort -V | head -n1)" = "3.9" ]; then
+    echo "Python version 3.9 or above is installed. Continuing..."
+  else
+    echo "Python version 3.9 or above is required. Exiting..."
+    exit 1
+  fi
+}
+
+start_dev_django_server() {
+  django-admin runserver 2>&1 >>local.dev.log &
+  PID_1=$!
+}
+
+start_vite_dev_server() {
+  npm start --color=always 2>&1 >>local.dev.log &
+  PID_2=$!
+}
+
+
+trap kill_all_processes INT TERM QUIT
+
+check_pipenv_env
+check_python_version
+check_node_version
+
+if [ "$1" = "start:dev" ]; then
+  MODE=1
+  start_dev_django_server
+  start_vite_dev_server
+  tail -f local.dev.log
+else
+  echo >&2 "Invalid or no argument(s) provided for run."
+fi

@@ -6,9 +6,13 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="{% static 'base/css/normalize.css' %}" />
-    <link rel="stylesheet" href="{% static 'base/css/theme.css' %}" />
-    <link rel="stylesheet" href="{% static 'base/css/terminal.css' %}" />
+    <link type="text/css" rel="stylesheet" href="{% static 'base/css/normalize.min.css' %}" />
+    <link type="text/css" rel="stylesheet" href="{% static 'base/css/jquery-ui.min.css' %}" />
+    <link type="text/css" rel="stylesheet" href="{% static 'base/css/jquery-ui-1.12.icon-font.min.css' %}" />
+    <link type="text/css" rel="stylesheet" href="{% static 'base/css/terminal.css' %}" />
+    <link type="text/css" rel="stylesheet" href="{% static 'base/css/theme.css' %}" />
+    <script type="text/javascript" src="{% static 'base/js/jquery/jquery.js' %}" defer></script>
+    <script type="text/javascript" src="{% static 'base/js/jquery/jquery-ui.min.js' %}" defer></script>
     <script type="text/javascript" src="{% static 'base/js/dist/index.iife.js' %}" defer></script>
     <!-- TODO: implement detailed head -->
     <title>{% block title %}{% endblock %}</title>
@@ -44,7 +48,7 @@
         <div>
           <h1>Pinned</h1>
           <!-- Todo: add image src -->
-          <img style="border-radius: 0.25em;" width="205px" height="auto" alt="image of sponsor" src="">
+          <img style="border-radius: 0.25em;" width="205px" height="auto" alt="image of sponsor" src="https://picsum.photos/205/275">
         </div>
         <div>
           <h1>Tags</h1>

@@ -3,7 +3,7 @@ import { Controller } from "@hotwired/stimulus";
 const KEY = "diary-of-a-polymath-theme";
 
 export default class extends Controller {
-  connect() {
+  initialize() {
     document.body.classList.add(localStorage.getItem(KEY) || "theme-light");
   }
 

@@ -33,7 +33,7 @@ Manual
 
 ```
 pipenv shell
-export APP_ENV="development"
+export APP_ENV="development" # [development | production | test]
 export PYTHONPATH="./src"
 export DJANGO_SETTINGS_MODULE="base.settings.${APP_ENV}"
 django-admin runserver

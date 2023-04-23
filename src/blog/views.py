@@ -13,7 +13,7 @@ def index(request):
         archives[post.published_on.year] += 1
     payload = dict(
         posts=posts,
-        archives=sorted(archives.items(), key=itemgetter(0)),
+        archives=sorted(archives.items(), key=itemgetter(0), reverse=True),
         tags=Tag.objects.all(),
     )
     return render(request, "blog/index.html", payload)
@@ -27,7 +27,7 @@ def post(request, slug):
         archives[post.published_on.year] += 1
     payload = dict(
         post=matched_post,
-        archives=sorted(archives.items(), key=itemgetter(0)),
+        archives=sorted(archives.items(), key=itemgetter(0), reverse=True),
         tags=Tag.objects.all(),
         prev=posts[max((*posts,).index(matched_post), 1) - 1],
         next=posts[min((*posts,).index(matched_post) + 1, len(posts) - 1)],
@@ -42,7 +42,7 @@ def archive(request, slug):
         archives[post.published_on.year] += 1
     payload = dict(
         posts=posts.filter(published_on__year=slug),
-        archives=sorted(archives.items(), key=itemgetter(0)),
+        archives=sorted(archives.items(), key=itemgetter(0), reverse=True),
         tags=Tag.objects.all(),
     )
     return render(request, "blog/archive.html", payload)
@@ -58,7 +58,7 @@ def tag(request, slug):
             tags__name__istartswith=slug.split("-")[0],
             tags__name__iendswith=slug.split("-")[-1],
         ),
-        archives=sorted(archives.items(), key=itemgetter(0)),
+        archives=sorted(archives.items(), key=itemgetter(0), reverse=True),
         tags=Tag.objects.all(),
     )
     return render(request, "blog/tag.html", payload)

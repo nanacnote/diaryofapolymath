@@ -1,7 +1,5 @@
 #!/bin/sh
 
-MODE=0
-
 set -e                                    # exit execution if a command fails
 set -a                                    # set marking all created and all modified variables for export
 [ ! -f ./.env ] || . ./.env               # load environment variables
@@ -10,14 +8,10 @@ set +a                                    # unset marking variables for export
 
 kill_all_processes() {
   echo "\n**Attempting a graceful shutdown**"
-
-  if [ "$MODE" -gt 0 ]; then
-    kill -15 "$PID_1" && 
-    echo "**Successfully terminated Django process [$PID_1]**"
-    kill -15 "$PID_2" &&
-    echo "**Successfully terminated Vite process [$PID_2]**"
-  fi
-
+  kill -15 "$PID_1" && 
+  echo "**Successfully terminated Django process [$PID_1]**"
+  kill -15 "$PID_2" &&
+  echo "**Successfully terminated Vite process [$PID_2]**"
   rm -rf local.dev.log &&
   echo "**Successfully deleted log file at [./local.dev.log]**"
   exit 0
@@ -58,7 +52,7 @@ check_python_version() {
   fi
 }
 
-start_dev_django_server() {
+start_django_dev_server() {
   django-admin runserver 2>&1 >>local.dev.log &
   PID_1=$!
 }
@@ -68,18 +62,16 @@ start_vite_dev_server() {
   PID_2=$!
 }
 
-
-trap kill_all_processes INT TERM QUIT
-
-check_pipenv_env
-check_python_version
-check_node_version
-
 if [ "$1" = "start:dev" ]; then
-  MODE=1
-  start_dev_django_server
+  trap kill_all_processes INT TERM QUIT
+  check_pipenv_env
+  check_python_version
+  check_node_version
+  start_django_dev_server
   start_vite_dev_server
   tail -f local.dev.log
+elif [ "$1" = "start:prod" ]; then
+  supervisord
 else
   echo >&2 "Invalid or no argument(s) provided for run."
 fi

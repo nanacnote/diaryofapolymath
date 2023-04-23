@@ -1,7 +1,8 @@
+import os
+
 from .base import *
 
-SECRET_KEY = ""
-
 DEBUG = False
-
-ALLOWED_HOSTS = ["localhost"]
+STATIC_ROOT = "/var/www/"
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
+ALLOWED_HOSTS = [os.environ.get("NGINX_SERVER_NAME")]

@@ -22,5 +22,5 @@ urlpatterns = [
     path("about/", include(("about.urls", "about"), namespace="about")),
     path("blog/", include(("blog.urls", "blog"), namespace="blog")),
     path("exclusive/", include(("exclusive.urls", "exclusive"), namespace="exclusive")),
-    path("", lambda _: redirect(reverse("about:index"))),
+    path("", lambda _: redirect(reverse("blog:index"))),
 ]

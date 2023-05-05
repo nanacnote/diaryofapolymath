@@ -21,7 +21,7 @@
     <section>
       <div class="terminal-nav">
         <div class="terminal-logo">
-          <div class="logo terminal-prompt"><a href="{% url 'about:index' %}" class="no-style">Diary of a Polymath</a></div>
+          <div class="logo terminal-prompt"><a href="/" class="no-style">Diary of a Polymath</a></div>
         </div>
         <nav class="terminal-menu">
           <ul>
@@ -45,26 +45,28 @@
         {% endautoescape %}
       </main>
       <aside>
-        <div>
-          <h1>Pinned</h1>
-          <!-- Todo: add image src -->
-          <img style="border-radius: 0.25em;" width="205px" height="auto" alt="image of sponsor" src="https://picsum.photos/205/275">
-        </div>
-        <div>
-          <h1>Tags</h1>
-          <ul>
-            {% for tag in tags %}
-              <li><a href="{% url 'blog:tag' tag.name|slugify %}">{{ tag.name }}</a></li>
-            {% endfor%}
-          </ul>
-        </div>
-        <div>
-          <h1>Archive</h1>
-          <ul>
-            {% for archive in archives %}
-              <li><a href="{% url 'blog:archive' archive.0 %}">{{ archive.0 }} ({{ archive.1 }})</a></li>
-            {% endfor%}
-          </ul>
+        <div style="position: sticky; top: 25px;">
+          <div>
+            <h1>Pinned</h1>
+            <!-- Todo: add image src -->
+            <img style="border-radius: 0.25em;" width="205px" height="auto" alt="image of sponsor" src="https://picsum.photos/205/205">
+          </div>
+          <div>
+            <h1>Tags</h1>
+            <ul>
+              {% for tag in tags %}
+                <li><a href="{% url 'blog:tag' tag.name|slugify %}">{{ tag.name }}</a></li>
+              {% endfor%}
+            </ul>
+          </div>
+          <div>
+            <h1>Archive</h1>
+            <ul>
+              {% for archive in archives %}
+                <li><a href="{% url 'blog:archive' archive.0 %}">{{ archive.0 }} ({{ archive.1 }})</a></li>
+              {% endfor%}
+            </ul>
+          </div>
         </div>
       </aside>
     </section>

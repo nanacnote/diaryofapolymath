@@ -1,0 +1,18 @@
+<section>
+    <div class="terminal-nav">
+      <div class="terminal-logo">
+        <div class="logo terminal-prompt"><a href="/" class="no-style">Diary of a Polymath</a></div>
+      </div>
+      <nav class="terminal-menu">
+        <ul>
+          <li><a class="{% if 'about/' in base_route_var %} active {% endif %}" href="{% url 'about:index' %}">About</a></li>
+          <li><a class="{% if 'blog/' in base_route_var %} active {% endif %}" href="{% url 'blog:index' %}">Blog</a></li>
+          <li><a class="{% if 'exclusive/' in base_route_var %} active {% endif %}" href="{% url 'exclusive:index' %}">Exclusive</a></li>
+          <li id="theme-switch" data-controller="theme">
+            <input id="theme-switch-input" type="checkbox" data-action="change->theme#toggle" />
+            <label for="theme-switch-input"></label>
+          </li>
+        </ul>
+      </nav>
+    </div>
+</section>

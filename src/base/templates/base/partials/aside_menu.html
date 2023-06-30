@@ -1,0 +1,37 @@
+<aside>
+    <div style="position: sticky; top: 25px;">
+      <div>
+        <h1>Pinned</h1>
+        <!-- Todo: add image src -->
+        <img style="border-radius: 0.25em;" width="205px" height="auto" alt="image of sponsor" src="https://picsum.photos/205/205">
+      </div>
+      <div>
+        <h1>Tags</h1>
+        <ul>
+          {% for tag in tags %}
+            <li>
+              <a style="display: flex;" href="{% url 'blog:tag' tag.slug %}">
+                <span>{{ tag.name }}</span>
+                <span style="flex: 1;"></span>
+                <span>[{{ tag.count }}]</span>
+              </a>
+            </li>
+          {% endfor%}
+        </ul>
+      </div>
+      <div>
+        <h1>Archive</h1>
+        <ul>
+          {% for archive in archives %}
+            <li>
+              <a style="display: flex;" href="{% url 'blog:archive' archive.year %}">
+                <span>{{ archive.year }}</span>
+                <span style="flex: 1;"></span>
+                <span>[{{ archive.count }}]</span>
+              </a>
+            </li>
+          {% endfor%}
+        </ul>
+      </div>
+    </div>
+</aside>

@@ -1,0 +1,35 @@
+{% load static %}
+{% with base_route_var=request.resolver_match.route %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link type="text/css" rel="stylesheet" href="{% static 'base/css/normalize.min.css' %}" />
+    <link type="text/css" rel="stylesheet" href="{% static 'base/css/jquery-ui.min.css' %}" />
+    <link type="text/css" rel="stylesheet" href="{% static 'base/css/jquery-ui-1.12.icon-font.min.css' %}" />
+    <link type="text/css" rel="stylesheet" href="{% static 'base/css/terminal.css' %}" />
+    <link type="text/css" rel="stylesheet" href="{% static 'base/css/theme.css' %}" />
+    <script type="text/javascript" src="{% static 'base/js/jquery/jquery.js' %}" defer></script>
+    <script type="text/javascript" src="{% static 'base/js/jquery/jquery-ui.min.js' %}" defer></script>
+    <script type="text/javascript" src="{% static 'base/js/dist/index.iife.js' %}" defer></script>
+    <!-- TODO: implement detailed head -->
+    <title>{% block title %}{% endblock %}</title>
+  </head>
+  <body class="terminal container container-fluid">
+    {% include "base/partials/navbar.html" %}
+    <section class="components-grid {% if 'blog/' in base_route_var %} show-aside {% endif %}" style="margin-top: 5em;">
+      <main>
+        {% autoescape off %}
+        {% block content %}
+          <div id="title-banner">{{ title_banner }}</div>
+        {% endblock %}
+        {% endautoescape %}
+      </main>
+      {% include "base/partials/aside_menu.html" %}
+    </section>
+    {% include "base/partials/footer.html" %}
+  </body>
+</html>
+{% endwith %}

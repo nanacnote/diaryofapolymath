@@ -10,4 +10,5 @@ dist
 *.pyc
 **/__pycache__/
 
+**/*.sqlite3
 notes.txt

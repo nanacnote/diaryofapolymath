@@ -4,9 +4,10 @@ from .models import Link, Profile, Timeline
 
 
 def index(request):
-    payload = dict(
-        profile=Profile.objects.all().first(),
-        links=Link.objects.all(),
-        timelines=Timeline.objects.all(),
+    profile = Profile.objects.get(is_superuser=True)
+    context = dict(
+        profile=profile,
+        links=profile.link_set.all(),
+        timelines=profile.timeline_set.all(),
     )
-    return render(request, "about/index.html", payload)
+    return render(request, "about/index.html", context)

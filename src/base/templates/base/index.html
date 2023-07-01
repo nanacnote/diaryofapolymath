@@ -1,5 +1,5 @@
 {% load static %}
-{% with base_route_var=request.resolver_match.route %}
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -19,17 +19,7 @@
   </head>
   <body class="terminal container container-fluid">
     {% include "base/partials/navbar.html" %}
-    <section class="components-grid {% if 'blog/' in base_route_var %} show-aside {% endif %}" style="margin-top: 5em;">
-      <main>
-        {% autoescape off %}
-        {% block content %}
-          <div id="title-banner">{{ title_banner }}</div>
-        {% endblock %}
-        {% endautoescape %}
-      </main>
-      {% include "base/partials/aside_menu.html" %}
-    </section>
+    {% block content %}{% endblock %}
     {% include "base/partials/footer.html" %}
   </body>
 </html>
-{% endwith %}

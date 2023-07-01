@@ -1,14 +1,22 @@
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 
-class Profile(models.Model):
-    name = models.CharField(max_length=50)
+class Profile(AbstractUser):
+    email = models.EmailField(unique=True)
     image_title = models.CharField(max_length=25)
     image_alt = models.CharField(max_length=50)
     image_src_url = models.TextField()
 
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = ["username"]
+
+    @property
+    def name(self):
+        return f"{self.first_name} {self.last_name}"
+
     def __str__(self):
-        return self.name
+        return self.email
 
 
 class Link(models.Model):

@@ -5,7 +5,7 @@ from .models import Post
 
 def index(request):
     context = dict(
-        posts=Post.objects.all(),
+        posts=Post.objects.get_published_posts(),
         tags=Post.objects.group_posts_by_tag_with_count(),
         archives=Post.objects.group_posts_by_year_with_count(),
     )
@@ -13,7 +13,7 @@ def index(request):
 
 
 def post(request, slug):
-    (post, prev, next) = Post.objects.get_current_previous_next_post_by_slug(slug=slug)
+    (post, prev, next) = Post.objects.get_current_previous_next_posts_by_slug(slug=slug)
     context = dict(
         post=post,
         prev=prev,
@@ -25,18 +25,18 @@ def post(request, slug):
 
 
 def archive(request, slug):
-    payload = dict(
-        posts=Post.objects.filter(published_on__year=slug),
+    context = dict(
+        posts=Post.objects.get_archived_posts_by_slug(slug),
         archives=Post.objects.group_posts_by_year_with_count(),
         tags=Post.objects.group_posts_by_tag_with_count(),
     )
-    return render(request, "blog/archive.html", payload)
+    return render(request, "blog/archive.html", context)
 
 
 def tag(request, slug):
-    payload = dict(
-        posts=Post.objects.filter(tags__slug=slug),
+    context = dict(
+        posts=Post.objects.get_tagged_posts_by_slug(slug),
         archives=Post.objects.group_posts_by_year_with_count(),
         tags=Post.objects.group_posts_by_tag_with_count(),
     )
-    return render(request, "blog/tag.html", payload)
+    return render(request, "blog/tag.html", context)

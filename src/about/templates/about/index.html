@@ -3,49 +3,54 @@
 {% block title %}About{% endblock %}
 
 {% block content %}
-<section>
-    <figure>
-      <img
-        src="{{ profile.image_src_url }}"
-        alt="{{ profile.image_alt }}"
-        title="{{ profile.image_title }}"
-        width="185px"
-        height="185px"
-        style="
-          border-radius: 50%;
-          margin: auto;
-          display: block;
-          "
-      />
-      <figcaption style="margin: 1.25em auto;">{{ profile.name }}</figcaption>
-    </figure>
-</section>
-<section style="text-align: center;">
-  {% for link in links %}
-    <span>
-      <a class="no-hover-bg" href="{{ link.icon_href }}">
+<main style="margin-top: 5em;">
+  <div id="title-banner"></div>
+  <section>
+      <figure>
         <img
-          src="{{ link.icon_src_url }}"
-          alt="{{ link.icon_alt }}"
-          title="{{ link.icon_title }}"
-          width="32px"
-          height="32px"
+          src="{{ profile.image_src_url }}"
+          alt="{{ profile.image_alt }}"
+          title="{{ profile.image_title }}"
+          width="185px"
+          height="185px"
+          style="
+            border-radius: 50%;
+            margin: auto;
+            display: block;
+            "
         />
-      </a>
-    </span>
-  {% endfor %}
-</section>
-<section style="margin-top: 2.5em;">
-  <div class="terminal-timeline">
-    {% for timeline in timelines %}
-      <div class="terminal-card">
-        <header style="text-align: left;">{{ timeline.header }}</header>
-        <div>
-          {{timeline.body}}
-        </div>
-      </div>
+        <figcaption style="margin: 1.25em auto;">{{ profile.name }}</figcaption>
+      </figure>
+  </section>
+  
+  <section style="text-align: center;">
+    {% for link in links %}
+      <span>
+        <a class="no-hover-bg" href="{{ link.icon_href }}">
+          <img
+            src="{{ link.icon_src_url }}"
+            alt="{{ link.icon_alt }}"
+            title="{{ link.icon_title }}"
+            width="26px"
+            height="26px"
+          />
+        </a>
+      </span>
     {% endfor %}
-  </div>
-  <br />
-</section>
+  </section>
+  
+  <section style="margin-top: 2.5em;">
+    <div class="terminal-timeline">
+      {% for timeline in timelines %}
+        <div class="terminal-card">
+          <header style="text-align: left;">{{ timeline.header }}</header>
+          <div>
+            {{timeline.body}}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    <br />
+  </section>
+</main>
 {% endblock %}

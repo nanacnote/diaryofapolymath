@@ -3,22 +3,27 @@
 {% block title %}Blog | Tag{% endblock %}
 
 {% block content %}
-{% with title_banner="Tagged "|add:request.resolver_match.kwargs.slug %}{{ block.super }}{% endwith %}
-  {% for post in posts %}
-  <div>
-    <h1>{{ post.title }}</h1>
-      <p style="color: var(--secondary-color);">{{ post.published_on|date:"F Y" }}</p>
-      <p style="color: var(--secondary-color); text-align: justify;">{{ post.abstract}}</p>
-      {% for tag in post.tags.all %}
-        <a href="{% url 'blog:tag' tag.slug %}">{{ tag.name }}</a>
-        {% if not forloop.last %} • {% endif %}
-      {% endfor %}
+<section class="components-grid show-aside" style="margin-top: 5em;">
+  <main>
+    <div id="title-banner">{{"Tagged "|add:request.resolver_match.kwargs.slug}}</div>
+    {% for post in posts %}
       <div>
-        <a class="no-hover-bg btn btn-default btn-ghost" style="margin-top: 1em;" href="{% url 'blog:post' post.slug %}">Read More</a>
+        <h1>{{ post.title }}</h1>
+          <p style="color: var(--secondary-color);">{{ post.published_on|date:"F Y" }}</p>
+          <p style="color: var(--secondary-color); text-align: justify;">{{ post.abstract}}</p>
+          {% for tag in post.tags.all %}
+            <a href="{% url 'blog:tag' tag.slug %}">{{ tag.name }}</a>
+            {% if not forloop.last %} • {% endif %}
+          {% endfor %}
+          <div>
+            <a class="no-hover-bg btn btn-default btn-ghost" style="margin-top: 1em;" href="{% url 'blog:post' post.slug %}">Read More</a>
+          </div>
       </div>
-  </div>
-  {% if not forloop.last %}
-    <hr/>
-  {% endif %}
-  {% endfor %}
+      {% if not forloop.last %}
+        <hr/>
+      {% endif %}
+    {% endfor %}
+  </main>
+  {% include "blog/partials/aside_menu.html" %}
+</section>
 {% endblock %}

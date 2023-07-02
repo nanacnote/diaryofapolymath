@@ -5,11 +5,13 @@
       </div>
       <nav class="terminal-menu">
         <ul>
+          {% with base_route_var=request.resolver_match.route %}
           <li><a class="{% if 'about/' in base_route_var %} active {% endif %}" href="{% url 'about:index' %}">About</a></li>
           <li><a class="{% if 'blog/' in base_route_var %} active {% endif %}" href="{% url 'blog:index' %}">Blog</a></li>
           <li><a class="{% if 'exclusive/' in base_route_var %} active {% endif %}" href="{% url 'exclusive:index' %}">Exclusive</a></li>
-          <li id="theme-switch" data-controller="theme">
-            <input id="theme-switch-input" type="checkbox" data-action="change->theme#toggle" />
+          {% endwith %}
+          <li id="theme-switch" data-controller="theme-handler">
+            <input id="theme-switch-input" type="checkbox" data-action="change->theme-handler#toggle" />
             <label for="theme-switch-input"></label>
           </li>
         </ul>

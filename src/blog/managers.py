@@ -24,7 +24,6 @@ class PostManager(Manager):
             .order_by("published_on")
             .first()
         )
-
         return (current, previous, next)
 
     def group_posts_by_tag_with_count(self):

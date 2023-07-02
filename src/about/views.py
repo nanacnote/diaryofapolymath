@@ -1,13 +1,13 @@
 from django.shortcuts import render
 
-from .models import Link, Profile, Timeline
+from .models import Profile
 
 
 def index(request):
-    profile = Profile.objects.get(is_superuser=True)
+    result = Profile.objects.get_profile_links_timelines_for_superuser()
     context = dict(
-        profile=profile,
-        links=profile.link_set.all(),
-        timelines=profile.timeline_set.all(),
+        profile=result[0],
+        links=result[1],
+        timelines=result[2],
     )
     return render(request, "about/index.html", context)

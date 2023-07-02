@@ -1,6 +1,8 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
+from about.managers import ProfileManager
+
 
 class Profile(AbstractUser):
     email = models.EmailField(unique=True)
@@ -11,15 +13,20 @@ class Profile(AbstractUser):
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["username"]
 
-    @property
-    def name(self):
-        return f"{self.first_name} {self.last_name}"
+    objects = ProfileManager()
 
     def __str__(self):
         return self.email
 
+    @property
+    def name(self):
+        return f"{self.first_name} {self.last_name}"
+
 
 class Link(models.Model):
+    class Meta:
+        ordering = ["icon_title"]
+
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     icon_title = models.CharField(max_length=25)
     icon_alt = models.CharField(max_length=50)
@@ -31,8 +38,12 @@ class Link(models.Model):
 
 
 class Timeline(models.Model):
+    class Meta:
+        ordering = ["-created_on"]
+
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    modified_on = models.DateTimeField(auto_now_add=True)
+    created_on = models.DateTimeField(auto_now_add=True)
+    modified_on = models.DateTimeField(auto_now=True)
     header = models.CharField(max_length=120, unique=True)
     body = models.TextField()
 

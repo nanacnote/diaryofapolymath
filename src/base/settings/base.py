@@ -3,17 +3,24 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 SECRET_KEY = "django-insecure-8n!a*89^r#!r)983_=4=6q64z8gt7zx2bw$)7099e$&z6iihe7"
 
-INSTALLED_APPS = [
+DJANGO_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+]
+
+EXTERNAL_APPS = []
+
+LOCAL_APPS = [
     "about",
     "blog",
     "exclusive",
 ]
+
+INSTALLED_APPS = DJANGO_APPS + EXTERNAL_APPS + LOCAL_APPS
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",

@@ -5,12 +5,14 @@ name = "pypi"
 
 [packages]
 django = "~=4.1"
+django-debug-toolbar = "~=4.1"
 gunicorn = "~=20.1"
+pytest-django = "~=4.5"
 
 [dev-packages]
 black = "*"
-isort = "*"
 flake8 = "*"
+isort = "*"
 
 [requires]
 python_version = "3.9"

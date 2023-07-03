@@ -13,11 +13,11 @@ def index(request):
 
 
 def post(request, slug):
-    (post, prev, next) = Post.objects.get_current_previous_next_posts_by_slug(slug=slug)
+    result = Post.objects.get_current_previous_next_posts_by_slug(slug=slug)
     context = dict(
-        post=post,
-        prev=prev,
-        next=next,
+        post=result[0],
+        prev=result[1],
+        next=result[2],
         tags=Post.objects.group_posts_by_tag_with_count(),
         archives=Post.objects.group_posts_by_year_with_count(),
     )

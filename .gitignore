@@ -1,6 +1,7 @@
 node_modules
 dist
 
+.pytest_cache
 .vscode
 .idea
 .env

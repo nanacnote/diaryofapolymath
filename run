@@ -70,6 +70,9 @@ if [ "$1" = "start:dev" ]; then
   start_django_dev_server
   start_vite_dev_server
   tail -f local.dev.log
+elif [ "$1" = "start:test" ]; then
+  shift
+  pytest "$@"
 elif [ "$1" = "start:prod" ]; then
   supervisord
 else

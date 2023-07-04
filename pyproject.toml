@@ -24,6 +24,12 @@ max-line-length = 88
 max-complexity = 18
 select = ["B", "C", "E", "F", "W", "T4"]
 
+[tool.pytest.env]
+APP_ENV = "test"
+
 [tool.pytest.ini_options]
-DJANGO_SETTINGS_MODULE = "base.settings.test"
-addopts = "--ds=base.settings.test"
+FAIL_INVALID_TEMPLATE_VARS = true
+django_find_project = false
+pythonpath = ". src"
+python_files = "test.py tests.py test_*.py *_tests.py"
+addopts = "-x -v -rA --ds=base.settings.test -n=logical --cov --no-cov-on-fail --cov-report=html --cov-fail-under=80"

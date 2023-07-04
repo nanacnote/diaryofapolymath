@@ -33,9 +33,15 @@ Manual
 
 ```
 pipenv shell
-export APP_ENV="development" # [development | production | test]
+export APP_ENV=<development | production | test>
 export PYTHONPATH="./src"
 export DJANGO_SETTINGS_MODULE="base.settings.${APP_ENV}"
 django-admin runserver
 npm start
+```
+
+### Test
+
+```
+./run start:test [extra pytest args]
 ```

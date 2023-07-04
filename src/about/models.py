@@ -10,13 +10,10 @@ class Profile(AbstractUser):
     image_alt = models.CharField(max_length=50)
     image_src_url = models.TextField()
 
-    USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["username"]
-
     objects = ProfileManager()
 
     def __str__(self):
-        return self.email
+        return self.name
 
     @property
     def name(self):

@@ -1,6 +1,6 @@
 import os
 
-from .base import *
+from base.settings.base import *
 
 DEBUG = False
 STATIC_ROOT = "/var/www/"

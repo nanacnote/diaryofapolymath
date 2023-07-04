@@ -1,6 +1,12 @@
 node_modules
 dist
 
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+
 .pytest_cache
 .vscode
 .idea

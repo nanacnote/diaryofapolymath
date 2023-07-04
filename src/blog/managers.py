@@ -5,17 +5,17 @@ class PostManager(Manager):
     def get_published_posts(self):
         return self.filter(published=True).prefetch_related("tags")
 
-    def get_tagged_posts_by_slug(self, slug):
+    def get_tagged_posts(self, slug):
         return self.filter(Q(tags__slug=slug) & Q(published=True)).prefetch_related(
             "tags"
         )
 
-    def get_archived_posts_by_slug(self, slug):
+    def get_archived_posts(self, slug):
         return self.filter(
             Q(published_on__year=slug) & Q(published=True)
         ).prefetch_related("tags")
 
-    def get_current_previous_next_posts_by_slug(self, slug):
+    def get_current_prev_next_posts(self, slug):
         current = self.prefetch_related("tags").get(slug=slug)
         previous = (
             self.filter(Q(published_on__lt=current.published_on) & Q(published=True))

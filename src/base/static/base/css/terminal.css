@@ -655,6 +655,7 @@ textarea:-webkit-autofill:hover textarea:-webkit-autofill:focus {
 }
 .terminal-card {
   border: 1px solid var(--secondary-color);
+  border-radius: 0.25em;
 }
 .terminal-card > header {
   color: var(--invert-font-color);
@@ -675,7 +676,7 @@ textarea:-webkit-autofill:hover textarea:-webkit-autofill:focus {
   display: inline-block;
   position: absolute;
   left: 35px;
-  width: 2px;
+  width: 1px;
   height: 100%;
   z-index: 400;
 }
@@ -685,14 +686,15 @@ textarea:-webkit-autofill:hover textarea:-webkit-autofill:focus {
 .terminal-timeline .terminal-card::before {
   content: " ";
   background: var(--invert-font-color);
-  border: 2px solid var(--secondary-color);
+  border: 1px solid var(--secondary-color);
   display: inline-block;
   position: absolute;
   margin-top: 25px;
-  left: 26px;
+  left: 27px;
   width: 15px;
   height: 15px;
   z-index: 400;
+  border-radius: 50%;
 }
 .terminal-alert {
   color: var(--font-color);

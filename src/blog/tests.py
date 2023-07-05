@@ -98,6 +98,8 @@ class TestBlogViews:
                 "base/index.html",
                 "blog/index.html",
                 "blog/partials/aside_menu.html",
+                "blog/partials/post_tags.html",
+                "blog/partials/post_stats.html",
             ]
         )
         assert all(attr in response.context for attr in ["posts", "tags", "archives"])
@@ -114,6 +116,8 @@ class TestBlogViews:
                 "base/index.html",
                 "blog/post.html",
                 "blog/partials/aside_menu.html",
+                "blog/partials/post_tags.html",
+                "blog/partials/post_stats.html",
             ]
         )
         assert all(
@@ -135,6 +139,8 @@ class TestBlogViews:
                 "base/index.html",
                 "blog/archive.html",
                 "blog/partials/aside_menu.html",
+                "blog/partials/post_tags.html",
+                "blog/partials/post_stats.html",
             ]
         )
         assert all(attr in response.context for attr in ["posts", "tags", "archives"])
@@ -155,6 +161,8 @@ class TestBlogViews:
                 "base/index.html",
                 "blog/tag.html",
                 "blog/partials/aside_menu.html",
+                "blog/partials/post_tags.html",
+                "blog/partials/post_stats.html",
             ]
         )
         assert all(attr in response.context for attr in ["posts", "tags", "archives"])

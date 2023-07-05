@@ -7,7 +7,7 @@
   <main>
     <div id="title-banner">{{"Tagged "|add:request.resolver_match.kwargs.slug}}</div>
     {% for post in posts %}
-      <div>
+      <div id="{{ post.slug }}">
         <h1>{{ post.title }}</h1>
           {% include "blog/partials/post_stats.html" %}
           <p style="color: var(--secondary-color); text-align: justify;">{{ post.abstract}}</p>

@@ -1,0 +1,6 @@
+/* 
+* https://github.com/marella/material-symbols 
+*
+* https://fonts.google.com/icons?icon.set=Material+Symbols&icon.style=Rounded
+*/
+@font-face{font-family:"Material Symbols Rounded";font-style:normal;font-weight:400;font-display:block;src:url("../font/material-symbols-rounded.woff2") format("woff2")}html .material-symbols-rounded{background-image:none!important;display:inline-block;font:18px/1.2em sans-serif;height:1.2em;margin:0;overflow:hidden;padding:0;position:relative;text-indent:-99999em;vertical-align:middle;width:1.2em}html .material-symbols-rounded:after{display:block;font-family:"Material Symbols Rounded",sans-serif;height:1em;left:50%;line-height:1;margin:-.5em;position:absolute;text-align:center;text-indent:0;text-transform:none;top:50%;vertical-align:middle;width:1em;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;-webkit-transform:translate(0,0);-moz-transform:translate(0,0);transform:translate(0,0)}.material-icon-timmer:after{content:"\e425"}.material-icon-calender-month:after{content:"\ebcc"}.material-icon-visibility:after{content:"\e8f4"}

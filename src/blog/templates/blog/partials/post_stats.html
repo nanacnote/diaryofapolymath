@@ -1,0 +1,8 @@
+{% load post_utils %}
+
+<div>
+    <p style="color: var(--secondary-color);">
+        <span class="ui-icon ui-icon-calendar"></span><span>&nbsp;{{ post.published_on|date:"F Y" }}</span>
+        &nbsp;&nbsp;<span class="ui-icon ui-icon-clock"></span><span>&nbsp;{{ post.body|read_time }}</span>
+    </p>
+</div>

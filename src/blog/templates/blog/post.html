@@ -12,21 +12,18 @@
         <span style="color: var(--secondary-color);"> | </span>
         <span style="color: var(--secondary-color);">{{ post.subtitle }}</span>
       </h1>
-  
-      <p style="color: var(--secondary-color);">{{ post.published_on|date:"F Y" }}</p>
-      {% for tag in post.tags.all %}
-        <a href="{% url 'blog:tag' tag.slug %}">{{ tag.name }}</a>
-        {% if not forloop.last %} • {% endif %}
-      {% endfor %}
 
-      <div style="margin-top: 1em; text-align: justify;" data-controller="content-parser">{{post.body}}</div>
+      {% include "blog/partials/post_stats.html" %}
+      {% include "blog/partials/post_tags.html" %}
+
+      <div style="margin-top: 1em; text-align: justify;" data-controller="content-parser">{{ post.body }}</div>
   
       <div style="display:flex; flex-wrap: wrap; margin-top: 2em;">
         <span>
           {% if prev %}
             <a class="no-hover-bg btn btn-default btn-ghost" style="text-align: center; width: 275px; flex-direction: column;" href="{% url 'blog:post' prev.slug %}">
               <strong>Previous</strong>
-              <span>{{prev.title|truncatechars:20}}</span>
+              <span>{{ prev.title|truncatechars:20 }}</span>
             </a>
           {% endif %}
         </span>
@@ -35,7 +32,7 @@
           {% if next %}
             <a class="no-hover-bg btn btn-default btn-ghost" style="text-align: center; width: 275px; flex-direction: column;" href="{% url 'blog:post' next.slug %}">
               <strong>Next</strong>
-              <span>{{next.title|truncatechars:20}}</span>
+              <span>{{ next.title|truncatechars:20 }}</span>
             </a>
           {% endif %}
         </span>

@@ -118,6 +118,7 @@ class TestBlogViews:
                 "blog/partials/aside_menu.html",
                 "blog/partials/post_tags.html",
                 "blog/partials/post_stats.html",
+                "blog/partials/post_cta.html",
             ]
         )
         assert all(

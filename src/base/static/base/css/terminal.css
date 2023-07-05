@@ -311,6 +311,17 @@ ol.terminal-toc li a {
   border: none;
   color: var(--secondary-color);
 }
+.terminal-menu li a.active::before {
+  content: "";
+  position: absolute;
+  bottom: 105%;
+  left: 50%;
+  right: 50%;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: var(--font-color);
+}
 .terminal-menu li a.active {
   color: var(--font-color);
 }
@@ -549,6 +560,8 @@ textarea:-webkit-autofill:hover textarea:-webkit-autofill:focus {
   user-select: none;
   position: relative;
   z-index: 1;
+  border-radius: 0.25em;
+  border-bottom-width: 2.5px;
 }
 .btn:active {
   box-shadow: none;

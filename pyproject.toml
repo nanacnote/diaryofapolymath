@@ -24,9 +24,6 @@ max-line-length = 88
 max-complexity = 18
 select = ["B", "C", "E", "F", "W", "T4"]
 
-[tool.pytest.env]
-APP_ENV = "test"
-
 [tool.pytest.ini_options]
 FAIL_INVALID_TEMPLATE_VARS = true
 django_find_project = false

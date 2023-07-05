@@ -828,6 +828,11 @@ figure > figcaption {
     margin-right: 1.5em;
   }
 }
+.btn-rounded-icon {
+  padding: 2.5px;
+  border-radius: 50%;
+  border-width: 1px;
+}
 #theme-switch input {
   display: none;
 }

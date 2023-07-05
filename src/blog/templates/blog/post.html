@@ -13,7 +13,11 @@
         <span style="color: var(--secondary-color);">{{ post.subtitle }}</span>
       </h1>
 
-      {% include "blog/partials/post_stats.html" %}
+      <div style="display: flex;">
+        {% include "blog/partials/post_stats.html" %}
+        <span style="flex: 1;"></span>
+        {% include "blog/partials/post_cta.html" %}
+      </div>
       {% include "blog/partials/post_tags.html" %}
 
       <div style="margin-top: 1em; text-align: justify;" data-controller="content-parser">{{ post.body }}</div>

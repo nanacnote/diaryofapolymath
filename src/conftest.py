@@ -92,16 +92,12 @@ class PostFactory(factory.django.DjangoModelFactory):
 # ---------
 @pytest.fixture(scope="function")
 def factory_class(request):
-    """gives access to a model factory instance by the classname"""
+    """gives access to a model factory instance(s) given the classname(s)"""
     module, factories = sys.modules[__name__], []
     param_list = request.param if isinstance(request.param, list) else [request.param]
     for param in param_list:
         factory = next(
-            (
-                value
-                for key, value in inspect.getmembers(module, inspect.isclass)
-                if key == param
-            ),
+            (value for key, value in inspect.getmembers(module, inspect.isclass) if key == param),
             None,
         )
         if factory is None:
@@ -111,7 +107,7 @@ def factory_class(request):
 
 
 @pytest.fixture(scope="session")
-def about_app_seed():
+def about_app_seeds():
     profile = ProfileFactory.build(is_staff=True, is_superuser=True)
     links = LinkFactory.build_batch(3, profile=profile)
     timelines = TimelineFactory.build_batch(3, profile=profile)
@@ -119,23 +115,23 @@ def about_app_seed():
 
 
 @pytest.fixture(scope="session")
-def blog_app_seed():
+def blog_app_seeds():
     tags = TagFactory.build_batch(3)
     posts = PostFactory.build(published=True, tags=tags)
     return (tags, posts)
 
 
 @pytest.fixture(scope="session")
-def django_db_setup(django_db_setup, django_db_blocker, about_app_seed, blog_app_seed):
-    """override and extends the `django_db_setup` fixture"""
+def django_db_setup(django_db_setup, django_db_blocker, about_app_seeds, blog_app_seeds):
+    """override and extends the inbuilt `django_db_setup` fixture"""
     with django_db_blocker.unblock():
         # seed the db with a profile
-        profile, links, timelines = about_app_seed
+        profile, links, timelines = about_app_seeds
         profile.save()
         for inst in links + timelines:
             inst.save()
         # seed the db with 1 post and 3 tags
-        tags, posts = blog_app_seed
+        tags, posts = blog_app_seeds
         for inst in tags:
             inst.save()
         posts.author = profile

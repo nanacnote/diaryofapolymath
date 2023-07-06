@@ -18,11 +18,7 @@ class TestBlogModels:
     )
     @pytest.mark.parametrize("factory_class", ["TagFactory"], indirect=True)
     def test_tag_model_has_expected_fields_and_constraints(
-        self,
-        factory_class,
-        field_name,
-        field_value,
-        error_message,
+        self, factory_class, field_name, field_value, error_message
     ):
         allowed_fields = ["id", "name", "slug"]
         tag = Tag.objects.first()
@@ -50,11 +46,7 @@ class TestBlogModels:
     )
     @pytest.mark.parametrize("factory_class", ["PostFactory"], indirect=True)
     def test_post_model_has_expected_fields_and_constraints(
-        self,
-        factory_class,
-        field_name,
-        field_value,
-        error_message,
+        self, factory_class, field_name, field_value, error_message
     ):
         allowed_fields = [
             "id",
@@ -122,16 +114,13 @@ class TestBlogViews:
             ]
         )
         assert all(
-            attr in response.context
-            for attr in ["post", "prev", "next", "tags", "archives"]
+            attr in response.context for attr in ["post", "prev", "next", "tags", "archives"]
         )
 
     @pytest.mark.parametrize("factory_class", ["PostFactory"], indirect=True)
     def test_archive_page_renders_correctly(self, client, factory_class):
         post = factory_class.create(published=True)
-        response = client.get(
-            reverse("blog:archive", kwargs={"slug": post.published_on.year})
-        )
+        response = client.get(reverse("blog:archive", kwargs={"slug": post.published_on.year}))
 
         assert response.status_code == HTTPStatus.OK
         assert all(
@@ -146,13 +135,11 @@ class TestBlogViews:
         )
         assert all(attr in response.context for attr in ["posts", "tags", "archives"])
 
-    @pytest.mark.parametrize(
-        "factory_class", [["TagFactory", "PostFactory"]], indirect=True
-    )
+    @pytest.mark.parametrize("factory_class", [["TagFactory", "PostFactory"]], indirect=True)
     def test_tag_page_renders_correctly(self, client, factory_class):
         tf, pf = factory_class
         tag = tf.create()
-        post = pf.create(published=True, tags=[tag])
+        _ = pf.create(published=True, tags=[tag])
         response = client.get(reverse("blog:tag", kwargs={"slug": tag.slug}))
 
         assert response.status_code == HTTPStatus.OK

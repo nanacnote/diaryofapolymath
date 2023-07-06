@@ -1,3 +1,5 @@
 from django.contrib import admin
 
-# Register your models here.
+from exclusive.models import Exclusive
+
+admin.site.register(Exclusive)

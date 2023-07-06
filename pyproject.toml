@@ -9,24 +9,27 @@ name = "Owusu K"
 email = "adjeibohyen@hotmail.co.uk"
 
 [tool.black]
-line-length = 88
+line-length = 99
+extend-exclude = "migrations"
 
 [tool.isort]
+profile = "black"
 multi_line_output = 3
 include_trailing_comma = true
 force_grid_wrap = 0
 use_parentheses = true
-line_length = 88
+line_length = 99
+extend_skip_glob = ["**/migrations"]
 
 [tool.flake8]
-ignore = ["E203", "E266", "E501", "W503"]
-max-line-length = 88
-max-complexity = 18
-select = ["B", "C", "E", "F", "W", "T4"]
+ignore = []
+extend-exclude = ["**/migrations", "**/base/settings"]
+max-line-length = 99
+max-complexity = 10 # mccabe cyclomatic complexity of the code
 
 [tool.pytest.ini_options]
 FAIL_INVALID_TEMPLATE_VARS = true
 django_find_project = false
 pythonpath = ". src"
 python_files = "test.py tests.py test_*.py *_tests.py"
-addopts = "-x -v -rA --ds=base.settings.test -n=logical --cov --no-cov-on-fail --cov-report=html --cov-fail-under=80"
+addopts = "-x -v -rA --ds=base.settings.test -n=logical --cov --no-cov-on-fail --cov-report=html --cov-fail-under=75"

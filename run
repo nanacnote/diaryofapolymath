@@ -8,7 +8,7 @@ set +a                                    # unset marking variables for export
 
 kill_all_processes() {
   echo "\n**Attempting a graceful shutdown**"
-  kill -15 "$PID_1" && 
+  kill -15 "$PID_1" &&
   echo "**Successfully terminated Django process [$PID_1]**"
   kill -15 "$PID_2" &&
   echo "**Successfully terminated Vite process [$PID_2]**"
@@ -72,6 +72,12 @@ if [ "$1" = "start:dev" ]; then
   tail -f local.dev.log
 elif [ "$1" = "start:django:debugger" ]; then
   python -m pdb ./src/manage.py runserver
+elif [ "$1" = "start:lint" ]; then
+  flake8 ./src
+elif [ "$1" = "start:lint:fix" ]; then
+  isort ./src \
+    && black ./src \
+    && flake8 ./src
 elif [ "$1" = "start:test" ]; then
   shift
   pytest "$@"

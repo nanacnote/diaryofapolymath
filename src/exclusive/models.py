@@ -1,3 +1,6 @@
 from django.db import models
 
-# Create your models here.
+
+# TODO: when ready to implement change class name symbol
+class Exclusive(models.Model):
+    pass

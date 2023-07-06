@@ -15,8 +15,9 @@ readtime = "~=2.0"
 
 [dev-packages]
 black = "*"
-isort = "*"
 flake8-pyproject = "*"
+isort = "*"
+pre-commit = "*"
 
 [requires]
 python_version = "3.9"

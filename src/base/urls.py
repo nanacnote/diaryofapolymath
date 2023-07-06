@@ -13,7 +13,5 @@ urlpatterns = [
 ]
 
 if os.environ.get("APP_ENV") == "development":
-    dev_urlpatterns = [
-        path("__debug__/", include("debug_toolbar.urls")),
-    ]
+    dev_urlpatterns = [path("__debug__/", include("debug_toolbar.urls"))]
     urlpatterns = urlpatterns + dev_urlpatterns

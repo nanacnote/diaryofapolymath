@@ -22,18 +22,11 @@ class TestAboutModels:
     )
     @pytest.mark.parametrize("factory_class", ["ProfileFactory"], indirect=True)
     def test_profile_model_has_expected_fields_and_constraints(
-        self,
-        factory_class,
-        field_name,
-        field_value,
-        error_message,
+        self, factory_class, field_name, field_value, error_message
     ):
-        allowed_fields = [
-            "id",
-            "image_title",
-            "image_alt",
-            "image_src_url",
-        ] + [field.name for field in AbstractUser._meta.get_fields()]
+        allowed_fields = ["id", "image_title", "image_alt", "image_src_url"] + [
+            field.name for field in AbstractUser._meta.get_fields()
+        ]
         profile = Profile.objects.first()
         with pytest.raises(IntegrityError) as error:
             factory_class.create(
@@ -60,20 +53,9 @@ class TestAboutModels:
     )
     @pytest.mark.parametrize("factory_class", ["LinkFactory"], indirect=True)
     def test_link_model_has_expected_fields_and_constraints(
-        self,
-        factory_class,
-        field_name,
-        field_value,
-        error_message,
+        self, factory_class, field_name, field_value, error_message
     ):
-        allowed_fields = [
-            "id",
-            "profile",
-            "icon_title",
-            "icon_alt",
-            "icon_href",
-            "icon_src_url",
-        ]
+        allowed_fields = ["id", "profile", "icon_title", "icon_alt", "icon_href", "icon_src_url"]
         link = Link.objects.first()
         with pytest.raises(IntegrityError) as error:
             factory_class.create(
@@ -103,14 +85,7 @@ class TestAboutModels:
         field_value,
         error_message,
     ):
-        allowed_fields = [
-            "id",
-            "profile",
-            "created_on",
-            "modified_on",
-            "header",
-            "body",
-        ]
+        allowed_fields = ["id", "profile", "created_on", "modified_on", "header", "body"]
         timeline = Timeline.objects.first()
         with pytest.raises(IntegrityError) as error:
             factory_class.create(
@@ -135,9 +110,7 @@ class TestAboutViews:
             attr in [template.name for template in response.templates]
             for attr in ["base/index.html", "about/index.html"]
         )
-        assert all(
-            attr in response.context for attr in ["profile", "links", "timelines"]
-        )
+        assert all(attr in response.context for attr in ["profile", "links", "timelines"])
 
 
 @pytest.mark.django_db

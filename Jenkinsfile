@@ -1,35 +1,25 @@
 pipeline {
-    agent none
+    agent any
 
     environment {
         REGISTRY_URL = "registry.hiramlabs.com"
         REGISTRY_NAMESPACE = "image/diaryofapolymath"
-        DOT_ENV_FILE_TEST = credential('diaryofapolymath-dot-env-file-test')
-        DOT_ENV_FILE_PROD = credential('diaryofapolymath-dot-env-file-prod')
     }
 
     options {
-        buildDiscarder(logRotator(numToKeepStr: '5'))
+        buildDiscarder(logRotator(numToKeepStr: '3'))
         disableConcurrentBuilds()
     }
 
     stages {
-        agent {
-            dockerfile {
-                filename 'Dockerfile.test'
-            }
-        }
         stage('Run all tests') {
-            agent {
-                docker {
-                    image 'docker:latest'
-                }
-            }
             steps {
                 script {
-                    def image = docker.build('test-image', '-f Dockerfile.test .')
-                    def container = image.run()
-                    sh "docker logs ${container.id}")
+                    withCredentials([file(credentialsId: 'diaryofapolymath-dot-env-file-test', variable: 'FILE')]) {
+                        sh 'cp $FILE .env'
+                        def image = docker.build('test-image', '-f Dockerfile.test .')
+                        sh "docker run --rm ${image.id}"
+                    }
                 }
             }
         }
@@ -37,16 +27,15 @@ pipeline {
             when {
                 branch 'staging'
             }
-            agent {
-                docker {
-                    image 'docker:latest'
-                    registryCredentials 'registry-auth-credential'
-                }
-            }
             steps {
                 script {
-                    def image = docker.build("${env.REGISTRY_URL}/${REGISTRY_NAMESPACE}", '-f Dockerfile.build .')
-                    image.push('canary')
+                    withCredentials([file(credentialsId: 'diaryofapolymath-dot-env-file-prod', variable: 'FILE')]) {
+                        sh 'cp $FILE .env'
+                        docker.withRegistry("https://${env.REGISTRY_URL}", 'registry-auth-credential') {
+                            def image = docker.build("${env.REGISTRY_URL}/${env.REGISTRY_NAMESPACE}", '-f Dockerfile.build .')
+                            image.push('canary')
+                        }
+                    }
                 }
             }
         }
@@ -54,25 +43,25 @@ pipeline {
             when {
                 branch 'main'
             }
-            agent {
-                docker {
-                    image 'docker:latest'
-                    registryCredentials 'registry-auth-credential'
-                }
-            }
             steps {
                 script {
-                    def tag = sh(script: "git describe --tags --abbrev=0 --match=main --exact-match", returnStdout: true).trim()
-                    def image = docker.build("${env.REGISTRY_URL}/${REGISTRY_NAMESPACE}", '-f Dockerfile.build .')
-                    image.push(tag)
-                    image.push('latest')
+                    withCredentials([file(credentialsId: 'diaryofapolymath-dot-env-file-prod', variable: 'FILE')]) {
+                        sh 'cp $FILE .env'
+                        docker.withRegistry("https://${env.REGISTRY_URL}", 'registry-auth-credential') {
+                            def tag = sh(script: "git describe --tags --abbrev=0 --match=main --exact-match", returnStdout: true).trim()
+                            def image = docker.build("${env.REGISTRY_URL}/${env.REGISTRY_NAMESPACE}", '-f Dockerfile.build .')
+                            image.push(tag)
+                            image.push('latest')
+                        }
+                    }
                 }
             }
         }
     }
+
     post {
         always {
-            sh('docker system prune -a -f --volumes')
+            sh 'docker system prune -a -f --volumes'
         }
     }
 }

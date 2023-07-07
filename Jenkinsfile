@@ -52,7 +52,7 @@ pipeline {
         }
         stage('Deploy to production') {
             when {
-                branch 'master'
+                branch 'main'
             }
             agent {
                 docker {
@@ -62,7 +62,7 @@ pipeline {
             }
             steps {
                 script {
-                    def tag = sh(script: "git describe --tags --abbrev=0 --match=master --exact-match", returnStdout: true).trim()
+                    def tag = sh(script: "git describe --tags --abbrev=0 --match=main --exact-match", returnStdout: true).trim()
                     def image = docker.build("${env.REGISTRY_URL}/${REGISTRY_NAMESPACE}", '-f Dockerfile.build .')
                     image.push(tag)
                     image.push('latest')

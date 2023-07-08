@@ -5,6 +5,18 @@ set -a                                    # set marking all created and all modi
 [ ! -f ./.env ] || . ./.env               # load environment variables
 set +a                                    # unset marking variables for export
 
+show_help() {
+    printf "\nUsage:\n\t%s [option]\n\n" "$0"
+    printf "Options:\n"
+    printf "\tstart:dev\t\t\tStart both Django and Vite servers.\n"
+    printf "\tstart:django:debugger\t\tStart the Django server in pdb (debugger) mode.\n"
+    printf "\tstart:lint\t\t\tScan the codebase and report any linting issues.\n"
+    printf "\tstart:lint:fix\t\t\tScan the codebase and automatically fix any linting issues.\n"
+    printf "\tstart:test\t\t\tRun tests using pytest. Additional arguments can be passed.\n"
+    printf "\tstart:prod\t\t\tStarts the Supervisor daemon. Used in production.\n"
+    printf "\n"
+    exit 1 # Exit script after printing help
+}
 
 kill_all_processes() {
   echo "\n**Attempting a graceful shutdown**"
@@ -84,5 +96,5 @@ elif [ "$1" = "start:test" ]; then
 elif [ "$1" = "start:prod" ]; then
   supervisord
 else
-  echo >&2 "Invalid or no argument(s) provided for run."
+  show_help
 fi

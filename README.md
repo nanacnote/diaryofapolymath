@@ -31,7 +31,7 @@ pre-commit install
 
 ```bash
 pipenv shell
-export APP_ENV=development          # development | production | test
+export APP_ENV=development          # [development] [production] [test]
 export PYTHONPATH="./src"
 export DJANGO_SETTINGS_MODULE="base.settings.${APP_ENV}"
 django-admin runserver
@@ -41,22 +41,30 @@ npm start
 #### Preferred
 
 ```bash
-./run start:dev                     # starts both django and vite servers
-./run start:django:debugger         # starts only the django server in pdb mode
+./run start:dev                     # Start both Django and Vite servers.
+./run start:django:debugger         # Start the Django server in pdb (debugger) mode.
 ```
 
 ### Linting
 
 ```bash
-./run start:lint
-./run start:lint:fix
+./run start:lint                    # Scan the codebase and report any linting issues.
+./run start:lint:fix                # Scan the codebase and automatically fix any linting issues.
 ```
 
 ### Test
 
 ```bash
-./run start:test                    # extra arguments will be passed to pytest
+./run start:test                    # Run tests using pytest. Additional arguments can be passed.
 ```
+
+### Commit Strategy
+
+Pre-commit hooks are in place to enforce consistent commit messages.
+
+[Hook](https://github.com/commitizen-tools/commitizen)
+
+[Specification](https://www.conventionalcommits.org/en/v1.0.0/)
 
 ### SCM Strategy
 
@@ -70,7 +78,7 @@ npm start
 > 1. No deployment from this branch.
 > 1. Hotfix branch must always be kept up to date with staging before branching from it.
 > 1. Branch from hotfix to start implementing a fix for a bug reported on the staging branch.
-> 1. After implementing the bug fix, commit it to the hotfix branch, then merge the hotfix branch back into staging.
+> 1. After implementing the bug fix, open a PR to the hotfix branch.
 
 #### Staging branch
 
@@ -81,4 +89,4 @@ npm start
 
 > 1. No deployment from this branch.
 > 1. Branch from develop to start implementing a new feature.
-> 1. After fully implementing the feature, commit it back to the develop branch.
+> 1. After fully implementing the feature, open a PR to the develop branch.

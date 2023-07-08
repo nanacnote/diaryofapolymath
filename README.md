@@ -57,3 +57,28 @@ npm start
 ```bash
 ./run start:test                    # extra arguments will be passed to pytest
 ```
+
+### SCM Strategy
+
+#### Main branch
+
+> 1. The production site is deployed from this branch.
+> 1. Only the staging branch can be merged into the main branch.
+
+#### Hotfix branch
+
+> 1. No deployment from this branch.
+> 1. Hotfix branch must always be kept up to date with staging before branching from it.
+> 1. Branch from hotfix to start implementing a fix for a bug reported on the staging branch.
+> 1. After implementing the bug fix, commit it to the hotfix branch, then merge the hotfix branch back into staging.
+
+#### Staging branch
+
+> 1. The staging site is deployed from this branch.
+> 1. Only the hotfix branch and the develop branch can be merged into the staging branch.
+
+#### Develop branch
+
+> 1. No deployment from this branch.
+> 1. Branch from develop to start implementing a new feature.
+> 1. After fully implementing the feature, commit it back to the develop branch.

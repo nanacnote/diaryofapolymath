@@ -1,0 +1,17 @@
+FROM python:3.9
+
+ENV PYTHONUNBUFFERED 1
+
+# copy all files and set the dest as working dir
+COPY . /usr/home/diaryofapolymath
+WORKDIR /usr/home/diaryofapolymath
+
+# setup python environment
+RUN set -a && . ./.env && set +a \
+    && pip install pipenv \
+    && pipenv requirements --dev > requirements.txt \
+    && pip3 install -r requirements.txt --no-cache-dir \
+    && pip3 uninstall pipenv -y \
+    && rm -rf Pipfile*
+
+CMD ["./run", "start:test"]

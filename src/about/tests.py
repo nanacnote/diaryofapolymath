@@ -116,4 +116,4 @@ class TestAboutViews:
 @pytest.mark.django_db
 class TestAboutUtils:
     def test_XXX_utility_as_a_unit(self):
-        pass
+        assert 1 == 2

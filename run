@@ -13,6 +13,7 @@ show_help() {
     printf "\tstart:lint\t\t\tScan the codebase and report any linting issues.\n"
     printf "\tstart:lint:fix\t\t\tScan the codebase and automatically fix any linting issues.\n"
     printf "\tstart:test\t\t\tRun tests using pytest. Additional arguments can be passed.\n"
+    printf "\tstart:test\t\t\tIn CI, tag the main branch with a release version number and include a change log.\n"
     printf "\tstart:prod\t\t\tStarts the Supervisor daemon. Used in production.\n"
     printf "\n"
     exit 1 # Exit script after printing help
@@ -93,6 +94,8 @@ elif [ "$1" = "start:lint:fix" ]; then
 elif [ "$1" = "start:test" ]; then
   shift
   pytest "$@"
+elif [ "$1" = "start:release" ]; then
+  npx semantic-release
 elif [ "$1" = "start:prod" ]; then
   supervisord
 else

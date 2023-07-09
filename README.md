@@ -58,6 +58,12 @@ npm start
 ./run start:test                    # Run tests using pytest. Additional arguments can be passed.
 ```
 
+### Release
+
+```bash
+./run start:release                    # In CI, tag the main branch with a release version number and include a change log.
+```
+
 ### Commit Strategy
 
 Pre-commit hooks are in place to enforce consistent commit messages.

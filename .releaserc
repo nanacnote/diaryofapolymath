@@ -8,16 +8,11 @@
     "@semantic-release/release-notes-generator",
     "@semantic-release/github",
     "@semantic-release/changelog",
-    [
-      "@semantic-release/git",
-      {
-        "message": "chore(release): ${nextRelease.version} [skip ci]"
-      }
-    ],
+    "@semantic-release/git",
     [
       "@semantic-release/exec",
       {
-        "successCmd": "export NEXT_RELEASE_VERSION=${nextRelease.version}"
+        "successCmd": "echo ${nextRelease.version} > __version__"
       }
     ]
   ]

@@ -1,3 +1,22 @@
+FROM node:16-alpine as node-builder
+
+# copy all files and set the dest as working dir
+COPY . /usr/home/diaryofapolymath
+WORKDIR /usr/home/diaryofapolymath
+
+# setup node environment
+RUN set -a && . ./.env && set +a \
+    && npm ci \
+    && npm run build
+
+
+
+
+
+
+
+
+
 # TODO: look into reducing the size of this image
 # TODO: add goat counter and remark4
 FROM debian:stable-slim

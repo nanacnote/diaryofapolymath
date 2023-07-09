@@ -6,6 +6,7 @@ RUN apk update \
 RUN npm install -g \
     semantic-release \
     @semantic-release/changelog \
-    @semantic-release/git
+    @semantic-release/git \
+    @semantic-release/exec
 
 ENTRYPOINT ["./run", "start:release"]

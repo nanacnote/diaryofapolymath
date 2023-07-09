@@ -23,9 +23,9 @@ pipeline {
                 script {
                     withCredentials([file(credentialsId: 'diaryofapolymath-dot-env-file-test', variable: 'FILE')]) {
                         sh 'cp $FILE .env'
-                        def testImage = docker.build('test-image', '-f Dockerfile.test .')
-                        sh "docker run --rm ${testImage.id}"
                     }
+                    def testImage = docker.build('test-image', '-f Dockerfile.test .')
+                    sh "docker run --rm ${testImage.id}"
                 }
             }
         }
@@ -40,11 +40,11 @@ pipeline {
             steps {
                 script {
                     withCredentials([file(credentialsId: 'diaryofapolymath-dot-env-file-prod', variable: 'FILE')]) {
-                        docker.withRegistry("https://${env.REGISTRY_URL}", 'registry-auth-credential') {
-                            sh 'cp $FILE .env'
-                            def stagingImage = docker.build("${env.REGISTRY_URL}/${env.REGISTRY_NAMESPACE}", '-f Dockerfile.build .')
-                            stagingImage.push('staging')
-                        }
+                        sh 'cp $FILE .env'
+                    }
+                    docker.withRegistry("https://${env.REGISTRY_URL}", 'registry-auth-credential') {
+                        def stagingImage = docker.build("${env.REGISTRY_URL}/${env.REGISTRY_NAMESPACE}", '-f Dockerfile.build .')
+                        stagingImage.push('staging')
                     }
                 }
             }
@@ -60,15 +60,15 @@ pipeline {
             steps {
                 script {
                     withCredentials([file(credentialsId: 'diaryofapolymath-dot-env-file-prod', variable: 'FILE')]) {
-                        docker.withRegistry("https://${env.REGISTRY_URL}", 'registry-auth-credential') {
-                            sh 'cp $FILE .env'
-                            def prodImage = docker.build("${env.REGISTRY_URL}/${env.REGISTRY_NAMESPACE}", '-f Dockerfile.build .')
-                            def releaseImage = docker.build("release-image", '-f Dockerfile.release .')
-                            sh "docker run --rm ${releaseImage.id} --dry-run"
-                            sh "++++++++++++++++ ${env.NEXT_RELEASE_VERSION} ++++++++++++++++"
-                            prodImage.push(tag)
-                            prodImage.push('latest')
-                        }
+                        sh 'cp $FILE .env'
+                    }
+                    docker.withRegistry("https://${env.REGISTRY_URL}", 'registry-auth-credential') {
+                        def prodImage = docker.build("${env.REGISTRY_URL}/${env.REGISTRY_NAMESPACE}", '-f Dockerfile.build .')
+                        def releaseImage = docker.build("release-image", '-f Dockerfile.release .')
+                        sh "docker run --rm -v $(PWD):/usr/home/diaryofapolymath ${releaseImage.id} --dry-run"
+                        def tag = sh(returnStdout: true, script: 'cat __version__').trim()
+                        // prodImage.push(tag)
+                        // prodImage.push('latest')
                     }
                 }
             }

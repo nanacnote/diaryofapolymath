@@ -64,7 +64,8 @@ pipeline {
                             sh 'cp $FILE .env'
                             def prodImage = docker.build("${env.REGISTRY_URL}/${env.REGISTRY_NAMESPACE}", '-f Dockerfile.build .')
                             def releaseImage = docker.build("release-image", '-f Dockerfile.release .')
-                            sh "docker run --rm ${releaseImage.id}"
+                            sh "docker run --rm ${releaseImage.id} --dry-run"
+                            sh "++++++++++++++++ ${env.NEXT_RELEASE_VERSION} ++++++++++++++++"
                             prodImage.push(tag)
                             prodImage.push('latest')
                         }

@@ -1,4 +1,4 @@
-FROM python:3.9
+FROM nikolaik/python-nodejs:python3.9-nodejs16-slim
 
 ENV PYTHONUNBUFFERED 1
 
@@ -14,4 +14,4 @@ RUN set -a && . ./.env && set +a \
     && pip3 uninstall pipenv -y \
     && rm -rf Pipfile*
 
-CMD ["./run", "start:test"]
+ENTRYPOINT ["./run", "start:test"]

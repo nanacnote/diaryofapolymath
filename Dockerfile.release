@@ -1,5 +1,9 @@
 FROM node:lts-alpine
 
+# copy all files and set the dest as working dir
+COPY . /usr/home/diaryofapolymath
+WORKDIR /usr/home/diaryofapolymath
+
 RUN apk update \
     && apk add git
 

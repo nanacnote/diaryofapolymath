@@ -14,4 +14,4 @@ RUN set -a && . ./.env && set +a \
     && pip3 uninstall pipenv -y \
     && rm -rf Pipfile*
 
-CMD ["./run", "start:test"]
+ENTRYPOINT ["./run", "start:test"]

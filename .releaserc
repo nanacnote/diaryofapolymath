@@ -13,6 +13,12 @@
       {
         "message": "chore(release): ${nextRelease.version} [skip ci]"
       }
+    ],
+    [
+      "@semantic-release/exec",
+      {
+        "successCmd": "export NEXT_RELEASE_VERSION=${nextRelease.version}"
+      }
     ]
   ]
 }

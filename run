@@ -95,7 +95,8 @@ elif [ "$1" = "start:test" ]; then
   shift
   pytest "$@"
 elif [ "$1" = "start:release" ]; then
-  npx semantic-release
+  shift
+  npx semantic-release "$@"
 elif [ "$1" = "start:prod" ]; then
   supervisord
 else

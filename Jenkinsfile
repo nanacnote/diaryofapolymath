@@ -15,7 +15,7 @@ pipeline {
         stage('Run all tests') {
             when {
                 expression {
-                    hasSkipCiKeywordInCommitMsg()
+                    isCommitMsgValidForCI()
                 }
             }
             steps {
@@ -32,7 +32,7 @@ pipeline {
             when {
                 branch 'staging'
                 expression {
-                    hasSkipCiKeywordInCommitMsg()
+                    isCommitMsgValidForCI()
                 }
             }
             steps {
@@ -51,7 +51,7 @@ pipeline {
             when {
                 branch 'main'
                 expression {
-                    hasSkipCiKeywordInCommitMsg()
+                    isCommitMsgValidForCI()
                 }
             }
             steps {
@@ -70,7 +70,7 @@ pipeline {
                         prodImage.push(tag)
                         prodImage.push('latest')
                     }
-                    
+
                 }
             }
         }
@@ -83,7 +83,7 @@ pipeline {
     }
 }
 
-def hasSkipCiKeywordInCommitMsg() {
+def isCommitMsgValidForCI() {
     def commitMessage = sh(returnStdout: true, script: 'git log -1 --pretty=%B').trim()
     return !(commitMessage =~ /.*\[skip ci\].*/).find()
 }

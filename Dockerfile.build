@@ -56,8 +56,6 @@ RUN set -a && . ./.env && set +a \
 
 # setup django environment
 RUN set -a && . ./.env && set +a \
-    && django-admin makemigrations --no-input \
-    && django-admin migrate --no-input \
     && django-admin collectstatic --no-input
 
 # clean up

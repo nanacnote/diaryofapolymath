@@ -65,6 +65,10 @@ check_python_version() {
   fi
 }
 
+run_django_db_migration() {
+  django-admin makemigrations --no-input && django-admin migrate --no-input
+}
+
 start_django_dev_server() {
   django-admin runserver 2>&1 >>local.dev.log &
   PID_1=$!
@@ -98,6 +102,7 @@ elif [ "$1" = "start:release" ]; then
   shift
   npx semantic-release "$@"
 elif [ "$1" = "start:prod" ]; then
+  run_django_db_migration
   supervisord
 else
   show_help

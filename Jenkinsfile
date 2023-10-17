@@ -15,8 +15,7 @@ pipeline {
         stage('Run all tests') {
             when {
                 expression {
-                    def commitMessage = sh(returnStdout: true, script: 'git log -1 --pretty=%B').trim()
-                    return !(commitMessage =~ /.*\[skip ci\].*/).find()
+                    isCommitMsgValidForCI()
                 }
             }
             steps {
@@ -33,8 +32,7 @@ pipeline {
             when {
                 branch 'staging'
                 expression {
-                    def commitMessage = sh(returnStdout: true, script: 'git log -1 --pretty=%B').trim()
-                    return !(commitMessage =~ /.*\[skip ci\].*/).find()
+                    isCommitMsgValidForCI()
                 }
             }
             steps {
@@ -53,8 +51,7 @@ pipeline {
             when {
                 branch 'main'
                 expression {
-                    def commitMessage = sh(returnStdout: true, script: 'git log -1 --pretty=%B').trim()
-                    return !(commitMessage =~ /.*\[skip ci\].*/).find()
+                    isCommitMsgValidForCI()
                 }
             }
             steps {
@@ -80,4 +77,9 @@ pipeline {
             sh 'docker system prune -a -f --volumes'
         }
     }
+}
+
+def isCommitMsgValidForCI() {
+    def commitMessage = sh(returnStdout: true, script: 'git log -1 --pretty=%B').trim()
+    return !(commitMessage =~ /.*\[skip ci\].*/).find()
 }

@@ -37,7 +37,7 @@ pipeline {
             }
             steps {
                 script {
-                    withCredentials([file(credentialsId: 'diaryofapolymath-dot-env-file-staging', variable: 'FILE')]) {
+                    withCredentials([file(credentialsId: 'diaryofapolymath-dot-env-file-staging-prod', variable: 'FILE')]) {
                         sh 'rm -rf .env && cp $FILE .env'
                     }
                     docker.withRegistry("https://${env.REGISTRY_URL}", 'registry-auth-credential') {
@@ -56,7 +56,7 @@ pipeline {
             }
             steps {
                 script {
-                    withCredentials([file(credentialsId: 'diaryofapolymath-dot-env-file-prod', variable: 'FILE')]) {
+                    withCredentials([file(credentialsId: 'diaryofapolymath-dot-env-file-main-prod', variable: 'FILE')]) {
                         sh 'rm -rf .env && cp $FILE .env'
                     }
                     def prodImage = docker.build("${env.REGISTRY_URL}/${env.REGISTRY_NAMESPACE}", '-f Dockerfile.build .')

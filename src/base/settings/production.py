@@ -10,7 +10,7 @@ ALLOWED_HOSTS = [os.environ.get("NGINX_SERVER_NAME")]
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.environ.get("DATABASE_NAME"),
+        "NAME": os.environ.get("DJANGO_DATABASE_NAME"),
         "USER": os.environ.get("DATABASE_USER"),
         "PASSWORD": os.environ.get("DATABASE_PASSWORD"),
         "HOST": os.environ.get("DATABASE_HOST"),

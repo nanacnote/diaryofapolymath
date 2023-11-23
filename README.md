@@ -12,6 +12,8 @@ Pipenv 2021.5.29
 
 Docker
 
+> At least **2GB** of memory, especially for docker image build container (pyscopg is built from source and has this requirement). See [docker memory docs](https://docs.docker.com/config/containers/resource_constraints).
+
 ### Setup
 
 ```bash
@@ -32,7 +34,7 @@ pre-commit install
 ```bash
 pipenv shell
 export APP_ENV=development          # [development] [production] [test]
-export PYTHONPATH="./src"
+export PYTHONPATH="./src:${PYTHONPATH}"
 export DJANGO_SETTINGS_MODULE="base.settings.${APP_ENV}"
 django-admin runserver
 npm start

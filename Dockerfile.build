@@ -1,93 +1,170 @@
-FROM node:16-alpine as node-builder
+FROM golang:1.21.4 AS GOATCOUNTER_BUILDER
 
-# copy all files and set the dest as working dir
-COPY . /usr/home/diaryofapolymath
-WORKDIR /usr/home/diaryofapolymath
+WORKDIR /usr/app/goatcounter
+COPY . .
 
-# setup node environment
 RUN set -a && . ./.env && set +a \
-    && npm ci \
-    && npm run build
+    && git clone --branch=release-2.4 https://github.com/arp242/goatcounter.git \
+    && cd goatcounter \
+    && CGO_ENABLED=0 \
+    go build \
+        -ldflags="-X zgo.at/goatcounter.Version=$(git log -n1 --format='%h_%cI')" \
+        ./cmd/goatcounter
 
 
+FROM python:3.9.18 as PYTHON_BUILDER
 
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV PATH=/opt/venv/bin:$PATH
 
+WORKDIR /usr/app/diaryofapolymath
+COPY . .
 
-
-
-
-
-# TODO: look into reducing the size of this image
-# TODO: add goat counter and remark4
-FROM debian:stable-slim
-
-ENV DEBIAN_FRONTEND noninteractive
-# used to handle nginx envsubst
-ENV DOLLAR $
-ENV NGINX_PORT 8080
-ENV PYTHONUNBUFFERED 1
-
-# update package manager
-RUN apt-get update
-
-# install all dependencies available in debian repo
-RUN apt-get install -y \
-    git \
-    curl \
-    gnupg2 \
-    gettext-base \
-    supervisor \
-    python3 \
-    python3-pip \
-    nginx
-
-# install nodejs
-RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash \
-    && apt-get install -y nodejs
-
-# copy all files and set the dest as working dir
-COPY . /usr/home/diaryofapolymath
-WORKDIR /usr/home/diaryofapolymath
-
-# setup nginx
-RUN set -a && . ./.env && set +a \
-    && envsubst < ./nginx.conf > ./diaryofapolymath.conf \
-    && rm -rf ./nginx.conf \
-    && mv ./diaryofapolymath.conf /etc/nginx/conf.d
-
-# setup supervisord config
-RUN set -a && . ./.env && set +a \
-    && mv ./supervisord.conf ./diaryofapolymath.conf \
-    && mv ./diaryofapolymath.conf /etc/supervisor/conf.d
-
-# setup node environment
-RUN set -a && . ./.env && set +a \
-    && npm ci \
-    && npm run build
-
-# setup python environment
 RUN set -a && . ./.env && set +a \
     && pip install pipenv \
     && pipenv requirements > requirements.txt \
-    && pip3 install -r requirements.txt --no-cache-dir \
-    && pip3 uninstall pipenv -y \
-    && rm -rf Pipfile*
+    && python -m venv --copies /opt/venv \
+    && . /opt/venv/bin/activate \
+    && pip install -r requirements.txt --no-cache-dir \
+    && pip install "psycopg[c]" \
+    && deactivate
 
-# setup django environment
+
+FROM node:16.20.2 as NODE_BUILDER
+
+WORKDIR /usr/app/diaryofapolymath
+COPY . .
+
 RUN set -a && . ./.env && set +a \
-    && django-admin collectstatic --no-input
+    && npm ci \
+    && npm run build
 
-# clean up
-RUN apt-get -y remove --purge \
-    git \
-    curl \
-    gnupg2 \
-    gettext-base \
-    nodejs \
-    && apt-get -y autoremove \
-    && apt-get -y clean \
-    && rm -rf /var/lib/apt/lists/*
 
-EXPOSE ${NGINX_PORT}
+FROM alpine:3.18.4 as CONFIG_BUILDER
 
-ENTRYPOINT ["./run", "start:prod"]
+WORKDIR /usr/app/diaryofapolymath
+COPY . .
+
+RUN apk add --update-cache \
+    gettext
+
+RUN set -a && . ./.env && set +a \
+    && envsubst < ./nginx.conf > ./diaryofapolymath.conf \
+    && cp ./supervisord.conf ./diaryofapolymath.conf
+
+
+FROM debian:stable-slim
+
+ENV DEBIAN_FRONTEND=noninteractive
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV NGINX_PORT=8080
+# used to handle ./nginx.conf file envsubst
+ENV DOLLAR=$
+
+RUN apt-get update && apt-get install -y \
+    libpq5 \
+    supervisor \
+    nginx
+
+WORKDIR /usr/app/diaryofapolymath
+COPY src ./src
+COPY run .env ./
+COPY --from=GOATCOUNTER_BUILDER /usr/app/goatcounter/goatcounter /opt/goatcounter
+COPY --from=PYTHON_BUILDER /opt/venv /opt/venv
+COPY --from=NODE_BUILDER /usr/app/diaryofapolymath/src/base/static/base/js/dist ./src/base/static/base/js/dist
+COPY --from=CONFIG_BUILDER /usr/app/diaryofapolymath/diaryofapolymath.conf /etc/nginx/conf.d/
+COPY --from=CONFIG_BUILDER /usr/app/diaryofapolymath/diaryofapolymath.conf /etc/supervisor/conf.d/
+
+# Todo manual install python
+# ln -s /usr/bin/python3 /usr/local/bin/python3
+# export PYTHONPATH=/opt/venv/lib/python3.12/site-packages:$PYTHONPATH
+
+
+
+
+
+
+
+
+
+
+
+
+# # TODO: look into reducing the size of this image
+# # TODO: add goat counter and remark4
+# FROM debian:stable-slim
+
+# ENV DEBIAN_FRONTEND noninteractive
+# # used to handle nginx envsubst
+# ENV DOLLAR $
+# ENV NGINX_PORT 8080
+# ENV PYTHONUNBUFFERED 1
+
+# # update package manager
+# RUN apt-get update
+
+# # install all dependencies available in debian repo
+# RUN apt-get install -y \
+#     git \
+#     curl \
+#     gnupg2 \
+#     gettext-base \
+#     supervisor \
+#     python3 \
+#     python3-pip \
+#     nginx
+
+# # install nodejs
+# RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash \
+#     && apt-get install -y nodejs
+
+# # copy all files and set the dest as working dir
+# COPY . /usr/home/diaryofapolymath
+# WORKDIR /usr/home/diaryofapolymath
+
+# # setup nginx
+# RUN set -a && . ./.env && set +a \
+#     && envsubst < ./nginx.conf > ./diaryofapolymath.conf \
+#     && rm -rf ./nginx.conf \
+#     && mv ./diaryofapolymath.conf /etc/nginx/conf.d
+
+# # setup supervisord config
+# RUN set -a && . ./.env && set +a \
+#     && mv ./supervisord.conf ./diaryofapolymath.conf \
+#     && mv ./diaryofapolymath.conf /etc/supervisor/conf.d
+
+# # setup node environment
+# RUN set -a && . ./.env && set +a \
+#     && npm ci \
+#     && npm run build
+
+# # setup python environment
+# RUN set -a && . ./.env && set +a \
+#     && pip install pipenv \
+#     && pipenv requirements > requirements.txt \
+#     && pip3 install -r requirements.txt --no-cache-dir \
+#     && pip3 uninstall pipenv -y \
+#     && rm -rf Pipfile*
+
+# # setup django environment
+# RUN set -a && . ./.env && set +a \
+#     && django-admin collectstatic --no-input
+
+# # clean up
+# RUN apt-get -y remove --purge \
+#     git \
+#     curl \
+#     gnupg2 \
+#     gettext-base \
+#     nodejs \
+#     && apt-get -y autoremove \
+#     && apt-get -y clean \
+#     && rm -rf /var/lib/apt/lists/*
+
+# EXPOSE ${NGINX_PORT}
+
+# ENTRYPOINT ["./run", "start:prod"]
+
+CMD [ "/bin/bash" ]

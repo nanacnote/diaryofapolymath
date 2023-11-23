@@ -6,17 +6,20 @@ set -a                                    # set marking all created and all modi
 set +a                                    # unset marking variables for export
 
 show_help() {
-    printf "\nUsage:\n\t%s [option]\n\n" "$0"
-    printf "Options:\n"
-    printf "\tstart:dev\t\t\tStart both Django and Vite servers.\n"
-    printf "\tstart:django:debugger\t\tStart the Django server in pdb (debugger) mode.\n"
-    printf "\tstart:lint\t\t\tScan the codebase and report any linting issues.\n"
-    printf "\tstart:lint:fix\t\t\tScan the codebase and automatically fix any linting issues.\n"
-    printf "\tstart:test\t\t\tRun tests using pytest. Additional arguments can be passed.\n"
-    printf "\tstart:test\t\t\tIn CI, tag the main branch with a release version number and include a change log.\n"
-    printf "\tstart:prod\t\t\tStarts the Supervisor daemon. Used in production.\n"
-    printf "\n"
-    exit 1 # Exit script after printing help
+  cat <<EOF
+Usage:
+  $0 [OPTIONS] <COMMANDS> [ARGS]
+
+Commands:
+  start:dev                 Start both Django and Vite servers.
+  start:django:debugger     Start the Django server in pdb (debugger) mode.
+  start:lint                Scan the codebase and report any linting issues.
+  start:lint:fix            Scan the codebase and automatically fix any linting issues.
+  start:test                Run tests using pytest. Additional arguments can be passed.
+  start:test                In CI, tag the main branch with a release version number and include a change log.
+  start:prod                Starts the Supervisor daemon. Used in production.
+EOF
+exit 1 # Exit script after printing help
 }
 
 kill_all_processes() {
@@ -65,8 +68,27 @@ check_python_version() {
   fi
 }
 
-run_django_db_migration() {
-  django-admin makemigrations --no-input && django-admin migrate --no-input
+setup_goatcounter_env() {
+  goatcounter db create site \
+    -vhost $GOATCOUNTER_DOMAIN_NAME \
+    -user.email $GOATCOUNTER_EMAIL \
+    -user.password $GOATCOUNTER_PASSWORD \
+    -db $GOATCOUNTER_DATABASE_URI \
+    -createdb
+
+  goatcounter serve \
+    -automigrate \
+    -tls http \
+    -smtp stdout \
+    -listen :$GOATCOUNTER_PORT \
+    -public-port $GOATCOUNTER_PORT \
+    -db $GOATCOUNTER_DATABASE_URI
+}
+
+setup_django_env() {
+  django-admin collectstatic --no-input \
+    && django-admin makemigrations --no-input \
+    && django-admin migrate --no-input
 }
 
 start_django_dev_server() {
@@ -102,7 +124,8 @@ elif [ "$1" = "start:release" ]; then
   shift
   npx semantic-release "$@"
 elif [ "$1" = "start:prod" ]; then
-  run_django_db_migration
+  setup_goatcounter_env
+  setup_django_env
   supervisord
 else
   show_help

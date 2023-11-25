@@ -7,7 +7,7 @@ from django.db import migrations
 
 class Migration(migrations.Migration):
     def generate_superuser(apps, schema_editor):
-        from django.contrib.auth.models import User
+        from about.models import Profile as User
 
         DJANGO_SUPERUSER_NAME = os.environ.get("DJANGO_SUPERUSER_NAME")
         DJANGO_SUPERUSER_EMAIL = os.environ.get("DJANGO_SUPERUSER_EMAIL")

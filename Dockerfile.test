@@ -3,8 +3,8 @@ FROM nikolaik/python-nodejs:python3.9-nodejs16-slim
 ENV PYTHONUNBUFFERED 1
 
 # copy all files and set the dest as working dir
-COPY . /usr/home/diaryofapolymath
-WORKDIR /usr/home/diaryofapolymath
+COPY . /usr/app/diaryofapolymath
+WORKDIR /usr/app/diaryofapolymath
 
 # setup python environment
 RUN set -a && . ./.env && set +a \

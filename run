@@ -74,15 +74,7 @@ setup_goatcounter_env() {
     -user.email $GOATCOUNTER_EMAIL \
     -user.password $GOATCOUNTER_PASSWORD \
     -db $GOATCOUNTER_DATABASE_URI \
-    -createdb
-
-  goatcounter serve \
-    -automigrate \
-    -tls http \
-    -smtp stdout \
-    -listen :$GOATCOUNTER_PORT \
-    -public-port $GOATCOUNTER_PORT \
-    -db $GOATCOUNTER_DATABASE_URI
+    -createdb || true
 }
 
 setup_django_env() {

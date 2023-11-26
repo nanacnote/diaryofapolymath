@@ -21,9 +21,10 @@ RUN set -a && . ./.env && set +a \
 
 FROM alpine as CONFIG_BUILDER
 
+ARG NGINX_PORT
+
 # used to handle ./nginx.conf file envsubst
 ENV DOLLAR=$
-ENV NGINX_PORT=$NGINX_PORT
 
 WORKDIR /usr/app/diaryofapolymath
 COPY .env nginx.conf supervisord.conf ./
@@ -66,6 +67,8 @@ RUN set -a && . ./.env && set +a \
 
 
 FROM debian:11-slim
+
+ARG NGINX_PORT
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV PYTHONDONTWRITEBYTECODE=1

@@ -6,18 +6,18 @@ set -a                                    # set marking all created and all modi
 set +a                                    # unset marking variables for export
 
 show_help() {
-  cat <<EOF
-Usage:
-  $0 [OPTIONS] <COMMANDS> [ARGS]
+  cat <<-EOF
+    Usage:
+      $0 [OPTIONS] <COMMANDS> [ARGS]
 
-Commands:
-  start:dev                 Start both Django and Vite servers.
-  start:django:debugger     Start the Django server in pdb (debugger) mode.
-  start:lint                Scan the codebase and report any linting issues.
-  start:lint:fix            Scan the codebase and automatically fix any linting issues.
-  start:test                Run tests using pytest. Additional arguments can be passed.
-  start:test                In CI, tag the main branch with a release version number and include a change log.
-  start:prod                Starts the Supervisor daemon. Used in production.
+    Commands:
+      start:dev                 Start both Django and Vite servers.
+      start:django:debugger     Start the Django server in pdb (debugger) mode.
+      start:lint                Scan the codebase and report any linting issues.
+      start:lint:fix            Scan the codebase and automatically fix any linting issues.
+      start:test                Run tests using pytest. Additional arguments can be passed.
+      start:release             In CI, tag the main branch with a release version number and include a change log.
+      start:prod                Starts the Supervisor daemon. Used in production.
 EOF
 exit 1 # Exit script after printing help
 }

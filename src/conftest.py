@@ -6,10 +6,13 @@ import sys
 
 import factory
 import pytest
+from django.db.migrations.executor import MigrationExecutor
+from django.db.migrations.recorder import MigrationRecorder
 from django.template.defaultfilters import slugify
 
 from about.models import Link, Profile, Timeline
 from blog.models import Post, Tag
+
 
 # --------------------------
 # ABOUT APP MODEL FACTORIES
@@ -108,6 +111,9 @@ def factory_class(request):
 
 @pytest.fixture(scope="session")
 def about_app_seeds():
+    # first delete superuser that is added from hard coded migration
+    Profile.objects.filter(is_superuser=True).first().delete()
+    # now add a superuser specific for testing
     profile = ProfileFactory.build(is_staff=True, is_superuser=True)
     links = LinkFactory.build_batch(3, profile=profile)
     timelines = TimelineFactory.build_batch(3, profile=profile)

@@ -92,7 +92,8 @@ COPY --from=PYTHON_BUILDER /opt/venv /opt/venv
 
 RUN set -a && . ./.env && set +a \
     && rm -r /opt/venv/bin/pip* /opt/venv/bin/python* \
-    && ln -s /usr/bin/python3 /opt/venv/bin/python
+    && ln -s /usr/bin/python3 /opt/venv/bin/python \
+    && django-admin collectstatic --no-input
 
 EXPOSE $NGINX_PORT
 ENTRYPOINT ["./run", "start:prod"]

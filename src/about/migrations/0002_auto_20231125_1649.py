@@ -9,17 +9,11 @@ class Migration(migrations.Migration):
     def generate_superuser(apps, schema_editor):
         from about.models import Profile as User
 
-        DJANGO_SUPERUSER_NAME = os.environ.get("DJANGO_SUPERUSER_NAME")
-        DJANGO_SUPERUSER_EMAIL = os.environ.get("DJANGO_SUPERUSER_EMAIL")
-        DJANGO_SUPERUSER_PASSWORD = os.environ.get("DJANGO_SUPERUSER_PASSWORD")
-
-        superuser = User.objects.create_superuser(
-            username=DJANGO_SUPERUSER_NAME,
-            email=DJANGO_SUPERUSER_EMAIL,
-            password=DJANGO_SUPERUSER_PASSWORD,
-        )
-
-        superuser.save()
+        User.objects.create_superuser(
+            username=os.environ.get("DJANGO_SUPERUSER_NAME"),
+            email=os.environ.get("DJANGO_SUPERUSER_EMAIL"),
+            password=os.environ.get("DJANGO_SUPERUSER_PASSWORD"),
+        ).save()
 
     dependencies = [
         ("about", "0001_initial"),

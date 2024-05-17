@@ -2,18 +2,15 @@
 
 import datetime
 import inspect
-import sys
 import os
+import sys
 
 import factory
 import pytest
-from django.db.migrations.executor import MigrationExecutor
-from django.db.migrations.recorder import MigrationRecorder
 from django.template.defaultfilters import slugify
 
 from about.models import Link, Profile, Timeline
 from blog.models import Post, Tag
-
 
 # --------------------------
 # ABOUT APP MODEL FACTORIES
@@ -130,7 +127,9 @@ def django_db_setup(django_db_setup, django_db_blocker, about_app_seeds, blog_ap
     """override and extends the inbuilt `django_db_setup` fixture"""
     with django_db_blocker.unblock():
         # first delete superuser that is added from hard coded migration
-        Profile.objects.filter(is_superuser=True, email=os.environ.get("DJANGO_SUPERUSER_EMAIL")).first().delete()
+        Profile.objects.filter(
+            is_superuser=True, email=os.environ.get("DJANGO_SUPERUSER_EMAIL")
+        ).first().delete()
         # seed the db with a profile
         profile, links, timelines = about_app_seeds
         profile.save()

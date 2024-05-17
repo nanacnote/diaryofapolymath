@@ -32,4 +32,4 @@ FAIL_INVALID_TEMPLATE_VARS = true
 django_find_project = false
 pythonpath = ". src"
 python_files = "test.py tests.py test_*.py *_tests.py"
-addopts = "-x -v -rA --ds=base.settings.test -n=logical --cov --no-cov-on-fail --cov-report=html --cov-fail-under=75"
+addopts = "-x -v -rA --ds=base.settings.test -n=logical --cov --no-cov-on-fail --cov-report=html --cov-report=term --cov-fail-under=95"

@@ -3,6 +3,7 @@
 import datetime
 import inspect
 import sys
+import os
 
 import factory
 import pytest
@@ -111,9 +112,6 @@ def factory_class(request):
 
 @pytest.fixture(scope="session")
 def about_app_seeds():
-    # first delete superuser that is added from hard coded migration
-    Profile.objects.filter(is_superuser=True).first().delete()
-    # now add a superuser specific for testing
     profile = ProfileFactory.build(is_staff=True, is_superuser=True)
     links = LinkFactory.build_batch(3, profile=profile)
     timelines = TimelineFactory.build_batch(3, profile=profile)
@@ -131,6 +129,8 @@ def blog_app_seeds():
 def django_db_setup(django_db_setup, django_db_blocker, about_app_seeds, blog_app_seeds):
     """override and extends the inbuilt `django_db_setup` fixture"""
     with django_db_blocker.unblock():
+        # first delete superuser that is added from hard coded migration
+        Profile.objects.filter(is_superuser=True, email=os.environ.get("DJANGO_SUPERUSER_EMAIL")).first().delete()
         # seed the db with a profile
         profile, links, timelines = about_app_seeds
         profile.save()

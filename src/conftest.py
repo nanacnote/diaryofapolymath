@@ -101,7 +101,7 @@ def factory_class(request):
             (value for key, value in inspect.getmembers(module, inspect.isclass) if key == param),
             None,
         )
-        if factory is None:
+        if factory is None:  # pragma: no cover
             raise ValueError(f"No factory found with name '{param}'")
         factories.append(factory)
     return factories[0] if not isinstance(request.param, list) else factories

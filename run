@@ -23,6 +23,7 @@ exit 1 # Exit script after printing help
 }
 
 kill_all_processes() {
+  echo ""
   echo "**Attempting a graceful shutdown**"
   kill -15 "$PID_1" &&
   echo "**Successfully terminated Django process [$PID_1]**"

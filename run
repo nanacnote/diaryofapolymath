@@ -23,7 +23,7 @@ exit 1 # Exit script after printing help
 }
 
 kill_all_processes() {
-  echo "\n**Attempting a graceful shutdown**"
+  echo "**Attempting a graceful shutdown**"
   kill -15 "$PID_1" &&
   echo "**Successfully terminated Django process [$PID_1]**"
   kill -15 "$PID_2" &&
@@ -93,6 +93,7 @@ start_vite_dev_server() {
 
 if [ "$1" = "start:dev" ]; then
   trap kill_all_processes INT TERM QUIT
+  setup_django_db
   check_pipenv_env
   check_python_version
   check_node_version

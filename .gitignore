@@ -11,6 +11,8 @@ coverage.xml
 .vscode
 .idea
 .env
+.env.prod
+.env.staging
 
 *.log
 

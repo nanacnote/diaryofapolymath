@@ -12,6 +12,6 @@ urlpatterns = [
     path("", lambda _: redirect(reverse("blog:index"))),
 ]
 
-if os.environ.get("APP_ENV") == "development":
+if os.environ.get("APP_ENV") == "development":  # pragma: no cover
     dev_urlpatterns = [path("__debug__/", include("debug_toolbar.urls"))]
     urlpatterns = urlpatterns + dev_urlpatterns

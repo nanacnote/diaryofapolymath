@@ -62,7 +62,7 @@ pipeline {
                     docker.withRegistry("https://${env.REGISTRY_URL}", 'registry-auth-credential') {
                         def prodImage = docker.build("${env.REGISTRY_URL}/${env.REGISTRY_NAMESPACE}", '-f Dockerfile.build .')
                         def releaseImage = docker.build("release-image", '-f Dockerfile.release .')
-                        sh "docker run --rm -v ${pwd()}:/usr/home/diaryofapolymath ${releaseImage.id} --dry-run"
+                        sh "docker run --rm -v ${pwd()}:/usr/home/diaryofapolymath ${releaseImage.id}"
                         def tag = sh(returnStdout: true, script: 'cat __version__').trim()
                         prodImage.push(tag)
                         prodImage.push('latest')
@@ -72,11 +72,11 @@ pipeline {
         }
     }
 
-    /* post { */
-    /*     always { */
-    /*         sh 'docker system prune -a -f --volumes' */
-    /*     } */
-    /* } */
+    post {
+        always {
+            sh 'docker system prune -a -f --volumes'
+        }
+    }
 }
 
 def isCommitMsgValidForCI() {

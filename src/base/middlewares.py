@@ -9,9 +9,11 @@ class AddGoatcounterScript:
         response = self.get_response(request)
         if "text/html" in response.get("Content-Type", ""):
             goatcounter_url = os.environ.get("GOATCOUNTER_DOMAIN_NAME")
-            script = "<script"
-            f'data-goatcounter="http://{goatcounter_url}/count" '
-            f'async src="//{goatcounter_url}/count.js"></script>'
+            script = (
+                "<script "
+                f'data-goatcounter="http://{goatcounter_url}/count" '
+                f'async src="//{goatcounter_url}/count.js"></script>'
+            )
             closing_body_index = response.content.find(b"</body>")
             if closing_body_index != -1:
                 response.content = (

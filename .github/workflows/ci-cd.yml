@@ -1,0 +1,93 @@
+name: CI/CD Pipeline
+
+env:
+  REGISTRY_NAMESPACE: image/diaryofapolymath
+
+on:
+  push:
+    branches:
+      - main
+      - staging
+  pull_request:
+    branches:
+      - main
+      - staging
+    types: [opened, synchronize, reopened]
+
+jobs:
+  test:
+    if: (github.event_name == 'push' && !contains(github.event.head_commit.message, '[skip ci]')) || (github.event_name == 'pull_request' && startsWith(github.event.pull_request.head.ref, 'feature/') && !contains(github.event.pull_request.title, '[skip ci]'))
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Create .env
+        run: |
+          cat <<EOF > .env
+          ${{ secrets.DOTENV_TEST }}
+          EOF
+      - name: Build test image
+        run: docker build -f Dockerfile.test -t test-image .
+      - name: Run tests
+        run: docker run --rm test-image
+
+  deploy-staging:
+    if: github.ref == 'refs/heads/staging' && !contains(github.event.head_commit.message, '[skip ci]')
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Create .env
+        run: |
+          cat <<EOF > .env
+          ${{ secrets.DOTENV_STAGING }}
+          EOF
+      - name: Login to registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ secrets.REGISTRY_URL }}
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+      - name: Build and push
+        run: |
+          docker build -f Dockerfile.build -t ${{ secrets.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}:staging .
+          docker push ${{ secrets.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}:staging
+      - name: Cleanup
+        if: always()
+        run: docker system prune -a -f --volumes
+
+  deploy-production:
+    if: github.ref == 'refs/heads/main' && !contains(github.event.head_commit.message, '[skip ci]')
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Create .env
+        run: |
+          cat <<EOF > .env
+          ${{ secrets.DOTENV_PROD }}
+          EOF
+      - name: Login to registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ secrets.REGISTRY_URL }}
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+      - name: Build release image
+        run: docker build -f Dockerfile.release -t release-image .
+      - name: Run release
+        run: docker run --rm -v $(pwd):/usr/home/diaryofapolymath release-image
+      - name: Get version
+        run: echo "VERSION=$(cat __version__)" >> $GITHUB_ENV
+      - name: Build prod image
+        run: |
+          docker build -f Dockerfile.build -t ${{ secrets.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}:${{ env.VERSION }} -t ${{ secrets.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}:latest .
+      - name: Push images
+        run: |
+          docker push ${{ secrets.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}:${{ env.VERSION }}
+          docker push ${{ secrets.REGISTRY_URL }}/${{ env.REGISTRY_NAMESPACE }}:latest
+      - name: Cleanup
+        if: always()
+        run: docker system prune -a -f --volumes

@@ -10,10 +10,8 @@
           <li><a class="{% if 'blog/' in base_route_var %} active {% endif %}" href="{% url 'blog:index' %}">Blog</a></li>
           <li><a class="{% if 'exclusive/' in base_route_var %} active {% endif %}" href="{% url 'exclusive:index' %}">Exclusive</a></li>
           {% endwith %}
-          <li id="theme-switch" data-controller="theme-handler">
-            <input id="theme-switch-input" type="checkbox" data-action="change->theme-handler#toggle" />
-            <label for="theme-switch-input"></label>
-          </li>
+          <li id="theme-switch-light"><a href="?theme=light"></a></li>
+          <li id="theme-switch-dark"><a href="?theme=dark"></a></li>
         </ul>
       </nav>
     </div>

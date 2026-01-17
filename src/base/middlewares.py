@@ -1,7 +1,7 @@
 import os
 
 
-class AddGoatcounterScript:
+class GoatcounterAnalyticsMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
 
@@ -22,3 +22,14 @@ class AddGoatcounterScript:
                     + response.content[closing_body_index:]  # noqa: W503
                 )
         return response
+
+
+class SessionThemeMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        theme = request.GET.get("theme")
+        if theme in ["light", "dark"]:
+            request.session["theme"] = theme
+        return self.get_response(request)

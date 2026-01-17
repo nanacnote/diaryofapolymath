@@ -840,11 +840,19 @@ figure > figcaption {
   border-radius: 50%;
   border-width: 1px;
 }
-#theme-switch input {
+body.theme-light #theme-switch-light {
   display: none;
 }
-#theme-switch label::before {
-  content: var(--switch-icon);
+body.theme-dark #theme-switch-dark {
+  display: none;
+}
+#theme-switch-light a::before {
+  content: "🌝";
+  font-size: 1.25em;
+  cursor: pointer;
+}
+#theme-switch-dark a::before {
+  content: "🌚";
   font-size: 1.25em;
   cursor: pointer;
 }

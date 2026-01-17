@@ -18,7 +18,7 @@
     <!-- TODO: implement detailed head with manifest comment out unused styles -->
     <title>{% block title %}{% endblock %}</title>
   </head>
-  <body class="terminal container container-fluid">
+  <body class="terminal container container-fluid theme-{{ session_theme }}">
     {% include "base/partials/navbar.html" %}
     {% block content %}{% endblock %}
     {% include "base/partials/footer.html" %}

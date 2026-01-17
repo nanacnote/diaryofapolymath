@@ -22,3 +22,5 @@ coverage.xml
 
 **/*.sqlite3
 notes.txt
+
+.DS_Store

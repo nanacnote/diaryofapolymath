@@ -28,7 +28,6 @@
   --code-bg-color: #e8eff2;
   --input-style: solid;
   --display-h1-decoration: none;
-  --switch-icon: "🌚";
 }
 .theme-dark {
   --background-color: #222225;
@@ -44,5 +43,4 @@
   --code-bg-color: #3f3f44;
   --input-style: solid;
   --display-h1-decoration: none;
-  --switch-icon: "🌝";
 }

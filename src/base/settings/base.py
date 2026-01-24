@@ -30,7 +30,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "base.middlewares.AddGoatcounterScript",
+    "base.middlewares.GoatcounterAnalyticsMiddleware",
+    "base.middlewares.SessionThemeMiddleware",
 ]
 
 TEMPLATES = [
@@ -44,6 +45,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "base.context_processors.session_theme_processor",
             ],
         },
     },
@@ -76,3 +78,6 @@ STATIC_URL = "static/"
 STATICFILES_DIRS = [BASE_DIR / "base" / "static"]
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "about.Profile"
+
+SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
+SESSION_COOKIE_AGE = 1209600  # Two weeks in seconds

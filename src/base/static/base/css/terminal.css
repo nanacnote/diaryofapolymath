@@ -314,7 +314,8 @@ ol.terminal-toc li a {
 .terminal-menu li a.active::before {
   content: "";
   position: absolute;
-  bottom: 105%;
+  top: 50%;
+  bottom: 0%;
   left: 50%;
   right: 50%;
   width: 5px;
@@ -743,6 +744,11 @@ textarea:-webkit-autofill:hover textarea:-webkit-autofill:focus {
   .terminal-menu li:last-child {
     margin-right: 0;
   }
+
+  .terminal-menu li a.active::before {
+    top: unset;
+    bottom: 105%;
+  }
 }
 .terminal-media:not(:last-child) {
   margin-bottom: 1.25rem;
@@ -814,6 +820,7 @@ figure > figcaption {
 }
 .components-grid.show-aside aside div {
   min-height: 10em;
+  width: 100%;
 }
 .components-grid.show-aside aside div:nth-child(n + 2) {
   margin-top: 2.5em;
@@ -833,11 +840,19 @@ figure > figcaption {
   border-radius: 50%;
   border-width: 1px;
 }
-#theme-switch input {
+body.theme-light #theme-switch-light {
   display: none;
 }
-#theme-switch label::before {
-  content: var(--switch-icon);
+body.theme-dark #theme-switch-dark {
+  display: none;
+}
+#theme-switch-light a::before {
+  content: "🌝";
+  font-size: 1.25em;
+  cursor: pointer;
+}
+#theme-switch-dark a::before {
+  content: "🌚";
   font-size: 1.25em;
   cursor: pointer;
 }

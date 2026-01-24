@@ -11,6 +11,7 @@ coverage.xml
 .vscode
 .idea
 .env
+.env.test
 .env.prod
 .env.staging
 
@@ -21,3 +22,5 @@ coverage.xml
 
 **/*.sqlite3
 notes.txt
+
+.DS_Store

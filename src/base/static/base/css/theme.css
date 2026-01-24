@@ -1,16 +1,19 @@
 @font-face {
-  font-family: space-grotesk;
-  src: url("../font/SpaceGrotesk-VariableFont_wght.ttf");
+  font-family: custom-font;
+  font-weight: 100 900;
+  font-style: normal oblique;
+  font-stretch: 50% 200%;
+  src: url("../font/SpaceGrotesk-VariableFont_wght.ttf") format("truetype");
 }
 :root {
   --global-font-size: 15px;
   --global-line-height: 1.4em;
   --global-space: 10px;
-  --font-stack: space-grotesk, Menlo, Monaco, Lucida Console, Liberation Mono,
-    DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;
-  --mono-font-stack: space-grotesk, Menlo, Monaco, Lucida Console,
-    Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New,
-    monospace, serif;
+  --font-stack: custom-font, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol";
+  --mono-font-stack: "JetBrains Mono", "Fira Code", "Cascadia Code", Menlo,
+    Monaco, "Courier New", Consolas, "Liberation Mono", monospace;
 }
 .theme-light {
   --background-color: #fff;
@@ -25,7 +28,6 @@
   --code-bg-color: #e8eff2;
   --input-style: solid;
   --display-h1-decoration: none;
-  --switch-icon: "🌚";
 }
 .theme-dark {
   --background-color: #222225;
@@ -41,5 +43,4 @@
   --code-bg-color: #3f3f44;
   --input-style: solid;
   --display-h1-decoration: none;
-  --switch-icon: "🌝";
 }

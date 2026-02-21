@@ -805,6 +805,11 @@ figure > figcaption {
   grid-template-columns: auto;
   grid-template-rows: auto;
 }
+.components-grid main {
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: auto;
+}
 @media only screen and (min-width: 40em) {
   .components-grid.show-aside {
     grid-template-columns: 9fr 3fr;

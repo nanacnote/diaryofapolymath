@@ -1,0 +1,84 @@
+/* Code block structure and layout */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; max-width: 100%; overflow-x: auto; }
+pre.sourceCode { margin: 0; max-width: 100%; overflow-x: auto; box-sizing: border-box; }
+
+/* Responsive behavior */
+@media screen {
+  div.sourceCode { overflow-x: auto; }
+}
+
+@media print {
+  pre > code.sourceCode { white-space: pre-wrap; }
+  pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+
+/* Line numbering - only apply left offset when numberSource is present */
+pre.numberSource code {
+  counter-reset: source-line 0;
+}
+
+pre.numberSource code > span {
+  position: relative;
+  left: -4em;
+  counter-increment: source-line;
+}
+
+pre.numberSource code > span > a:first-child::before {
+  content: counter(source-line);
+  position: relative;
+  left: -1em;
+  text-align: right;
+  vertical-align: baseline;
+  border: none;
+  display: inline-block;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  padding: 0 4px;
+  width: 4em;
+  color: #aaaaaa;
+}
+
+pre.numberSource { padding-left: 3em; border-left: 1px solid #aaaaaa; }
+
+/* Screen-only styling for line number links */
+@media screen {
+  pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #dc322f; font-weight: bold; } /* Alert/Error - Red */
+code span.an { color: #859900; font-weight: bold; font-style: italic; } /* Annotation - Green */
+code span.at { color: #b58900; } /* Attribute - Yellow */
+code span.bn { color: #d33682; } /* Binary Number - Magenta */
+code span.bu { color: #cb4b16; } /* Built-in - Orange */
+code span.cf { color: #dc322f; font-weight: bold; } /* Control Flow - Red */
+code span.ch { color: #2aa198; } /* Character - Cyan */
+code span.cn { color: #d33682; } /* Constant - Magenta */
+code span.co { color: #93a1a1; font-style: italic; } /* Comment - Gray */
+code span.cv { color: #93a1a1; font-weight: bold; font-style: italic; } /* Comment Var - Gray */
+code span.do { color: #93a1a1; font-style: italic; } /* Documentation - Gray */
+code span.dt { color: #b58900; } /* Data Type - Yellow */
+code span.dv { color: #d33682; } /* Decimal Value - Magenta */
+code span.er { color: #dc322f; font-weight: bold; } /* Error - Red */
+code span.ex { color: #cb4b16; } /* Exception - Orange */
+code span.fl { color: #d33682; } /* Float - Magenta */
+code span.fu { color: #268bd2; } /* Function - Blue */
+code span.im { color: #dc322f; font-weight: bold; } /* Import - Red */
+code span.in { color: #93a1a1; font-weight: bold; font-style: italic; } /* Information - Gray */
+code span.kw { color: #859900; font-weight: bold; } /* Keyword - Green */
+code span.op { color: #859900; } /* Operator - Green */
+code span.ot { color: #cb4b16; } /* Other - Orange */
+code span.pp { color: #cb4b16; } /* Preprocessor - Orange */
+code span.sc { color: #2aa198; } /* Special Character - Cyan */
+code span.ss { color: #2aa198; } /* Special String - Cyan */
+code span.st { color: #2aa198; } /* String - Cyan */
+code span.va { color: #268bd2; } /* Variable - Blue */
+code span.vs { color: #2aa198; } /* Verbatim String - Cyan */
+code span.wa { color: #cb4b16; font-weight: bold; font-style: italic; } /* Warning - Orange */

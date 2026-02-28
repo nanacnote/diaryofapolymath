@@ -22,7 +22,7 @@
         <figcaption style="margin: 1.25em auto;">{{ profile.name }}</figcaption>
       </figure>
   </section>
-  
+
   <section style="text-align: center;">
     {% for link in links %}
       <span>
@@ -38,15 +38,13 @@
       </span>
     {% endfor %}
   </section>
-  
+
   <section style="margin-top: 2.5em;">
     <div class="terminal-timeline">
       {% for timeline in timelines %}
         <div class="terminal-card">
           <header style="text-align: left;">{{ timeline.header }}</header>
-          <div>
-            {{timeline.body}}
-          </div>
+          <div data-controller="content-parser">{{ timeline.body }}</div>
         </div>
       {% endfor %}
     </div>

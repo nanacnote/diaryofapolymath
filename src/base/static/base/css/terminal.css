@@ -725,7 +725,7 @@ textarea:-webkit-autofill:hover textarea:-webkit-autofill:focus {
     width: 100%;
   }
 }
-@media only screen and (min-width: 30em) {
+@media only screen and (min-width: 40em) {
   .terminal-nav {
     flex-direction: row;
     align-items: center;
@@ -874,7 +874,7 @@ body.theme-dark #theme-switch-dark {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-@media only screen and (max-width: 30em) {
+@media only screen and (max-width: 40em) {
   #title-banner {
     top: 215px;
   }

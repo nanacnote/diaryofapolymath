@@ -44,7 +44,9 @@
       {% for timeline in timelines %}
         <div class="terminal-card">
           <header style="text-align: left;">{{ timeline.header }}</header>
-          <div data-controller="content-parser">{{ timeline.body }}</div>
+          <div style="width: 100%; overflow-x: auto;">
+            <div data-controller="content-parser">{{ timeline.body }}</div>
+          </div>
         </div>
       {% endfor %}
     </div>

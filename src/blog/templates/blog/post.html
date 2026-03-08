@@ -20,8 +20,12 @@
       </div>
       {% include "blog/partials/post_tags.html" %}
 
-      <div style="margin-top: 1em; text-align: justify;" data-controller="content-parser">{{ post.body }}</div>
-  
+      <div style="margin: 2em 1em;">
+        <span style="color: var(--secondary-color); font-style: italic;">{{ post.abstract}}</span>
+      </div>
+
+      <div style="text-align: justify;" data-controller="content-parser">{{ post.body }}</div>
+
       <div style="display:flex; flex-wrap: wrap; margin-top: 2em;">
         <span>
           {% if prev %}

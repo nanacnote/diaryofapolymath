@@ -157,6 +157,28 @@ class TestBlogViews:
 
 
 @pytest.mark.django_db
+class TestBlogFeeds:
+    def test_rss_feed_renders_correctly(self, client):
+        response = client.get(reverse("blog:rss"))
+
+        assert response.status_code == HTTPStatus.OK
+        assert response["Content-Type"] == "application/rss+xml; charset=utf-8"
+        assert all(
+            attr in response.content.decode("utf-8")
+            for attr in ["<rss", "<channel", "<item", "</rss>"]
+        )
+
+    def test_atom_feed_renders_correctly(self, client):
+        response = client.get(reverse("blog:atom"))
+
+        assert response.status_code == HTTPStatus.OK
+        assert response["Content-Type"] == "application/atom+xml; charset=utf-8"
+        assert all(
+            attr in response.content.decode("utf-8") for attr in ["<feed", "<entry", "</feed>"]
+        )
+
+
+@pytest.mark.django_db
 class TestBlogUtils:
     def test_XXX_utility_as_a_unit(self):
         pass

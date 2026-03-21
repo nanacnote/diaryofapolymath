@@ -1,8 +1,8 @@
 {% extends "base/index.html" %}
 
 {% block head %}
-  <link rel="alternate" type="application/rss+xml" title="RSS feed for {{ copy.site_name }}" href="{% url 'blog:rss' %}" />
-  <link rel="alternate" type="application/atom+xml" title="Atom feed for {{ copy.site_name }}" href="{% url 'blog:atom' %}" />
+  <link rel="alternate" type="application/rss+xml" title="RSS feed for {{ copy.meta_site_name }}" href="{% url 'blog:rss' %}" />
+  <link rel="alternate" type="application/atom+xml" title="Atom feed for {{ copy.meta_site_name }}" href="{% url 'blog:atom' %}" />
 {% endblock %}
 
 {% block title %}Blog{% endblock %}

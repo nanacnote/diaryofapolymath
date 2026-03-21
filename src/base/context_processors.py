@@ -6,7 +6,11 @@ def session_theme_processor(request):
 def copy_processor(request):
     return {
         "copy": {
-            "site_name": "Diary of a Polymath",
-            "site_description": "",
+            "meta_site_name": "Diary of a Polymath",
+            "meta_site_description": "",
+            "nav_about": "About",
+            "nav_blog": "Blog",
+            "nav_exclusive": "Exclusive",
+            "footer_powered_by": "Powered by",
         }
     }

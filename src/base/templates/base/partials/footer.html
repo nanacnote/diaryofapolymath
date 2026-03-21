@@ -2,8 +2,11 @@
     <hr/>
     <div style="display:flex; flex-wrap: wrap;">
       <span>
-        © {% now "Y" %} |
-        <a href="https://creativecommons.org/publicdomain/zero/1.0/" target="_blank" rel="noopener noreferrer"> CC0 1.0 Universal</a>
+        <span>© {% now "Y" %}</span>
+        <span>&nbsp;|&nbsp;</span>
+        <span>
+          <a href="https://creativecommons.org/publicdomain/zero/1.0/" target="_blank" rel="noopener noreferrer">CC0 1.0 Universal</a>
+        </span>
       </span>
       <span style="flex: 1; padding: 1em 0;"></span>
       <span>
@@ -20,7 +23,11 @@
         </span>
         <span>&nbsp;|&nbsp;</span>
         <span>
-          Powered by <a href="https://www.djangoproject.com/" target="_blank" rel="noopener noreferrer">django</a>
+          <span>{{ copy.footer_powered_by }}</span>
+          <span>&nbsp;</span>
+          <span>
+            <a href="https://www.djangoproject.com/" target="_blank" rel="noopener noreferrer">django</a>
+          </span>
         </span>
       </span>
 

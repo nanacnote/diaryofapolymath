@@ -7,6 +7,16 @@ STATIC_ROOT = "/var/www/"
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 ALLOWED_HOSTS = [os.environ.get("DJANGO_DOMAIN_NAME")]
 
+PROD_APPS = []
+
+INSTALLED_APPS = INSTALLED_APPS + PROD_APPS
+
+PROD_MIDDLEWARE = [
+    "base.middlewares.GoatcounterAnalyticsMiddleware",
+]
+
+MIDDLEWARE = MIDDLEWARE + PROD_MIDDLEWARE
+
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",

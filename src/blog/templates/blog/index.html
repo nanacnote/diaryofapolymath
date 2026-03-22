@@ -3,9 +3,8 @@
 {% block head %}
   <link rel="alternate" type="application/rss+xml" title="RSS feed for {{ copy.meta_site_name }}" href="{% url 'blog:rss' %}" />
   <link rel="alternate" type="application/atom+xml" title="Atom feed for {{ copy.meta_site_name }}" href="{% url 'blog:atom' %}" />
+  <title>{{ copy.nav_blog }}</title>
 {% endblock %}
-
-{% block title %}Blog{% endblock %}
 
 {% block content %}
 <section class="components-grid show-aside" style="margin-top: 5em;">

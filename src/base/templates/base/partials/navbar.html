@@ -1,17 +1,16 @@
 <section>
     <div class="terminal-nav">
       <div class="terminal-logo">
-        <div class="logo terminal-prompt"><a href="/" class="no-style">{{ copy.site_name }}</a></div>
+        <div class="logo terminal-prompt"><a href="/" class="no-style">{{ copy.meta_site_name }}</a></div>
       </div>
       <nav class="terminal-menu">
         <ul>
           {% with base_route_var=request.resolver_match.route %}
-          <li><a class="{% if 'about/' in base_route_var %} active {% endif %}" href="{% url 'about:index' %}">About</a></li>
-          <li><a class="{% if 'blog/' in base_route_var %} active {% endif %}" href="{% url 'blog:index' %}">Blog</a></li>
-          <li><a class="{% if 'exclusive/' in base_route_var %} active {% endif %}" href="{% url 'exclusive:index' %}">Exclusive</a></li>
+          <li><a class="{% if 'about/' in base_route_var %} active {% endif %}" href="{% url 'about:index' %}">{{ copy.nav_about }}</a></li>
+          <li><a class="{% if 'blog/' in base_route_var %} active {% endif %}" href="{% url 'blog:index' %}">{{ copy.nav_blog }}</a></li>
+          <li><a class="{% if 'exclusive/' in base_route_var %} active {% endif %}" href="{% url 'exclusive:index' %}">{{ copy.nav_exclusive }}</a></li>
           {% endwith %}
-          <li id="theme-switch-light"><a href="?theme=light"></a></li>
-          <li id="theme-switch-dark"><a href="?theme=dark"></a></li>
+          <li id="theme-switch-{{ session_theme }}"><a href="?theme={% if session_theme == 'light' %}dark{% else %}light{% endif %}"></a></li>
         </ul>
       </nav>
     </div>

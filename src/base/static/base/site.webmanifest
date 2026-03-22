@@ -1,0 +1,45 @@
+{
+	"name": "Diary of a Polymath",
+	"short_name": "doap",
+	"description": "A personal knowledge journal and publishing space.",
+	"lang": "en",
+	"dir": "ltr",
+	"id": "/",
+	"start_url": "/",
+	"scope": "/",
+	"display": "standalone",
+	"display_override": ["window-controls-overlay", "standalone", "minimal-ui", "browser"],
+	"orientation": "portrait-primary",
+	"theme_color": "#1a95e0",
+	"background_color": "#ffffff",
+	"categories": ["productivity", "education", "books", "lifestyle"],
+	"icons": [
+		{
+			"src": "./image/favicon/favicon-32x32.png",
+			"sizes": "32x32",
+			"type": "image/png"
+		},
+		{
+			"src": "./image/favicon/favicon-16x16.png",
+			"sizes": "16x16",
+			"type": "image/png"
+		},
+		{
+			"src": "./image/favicon/apple-touch-icon.png",
+			"sizes": "180x180",
+			"type": "image/png"
+		},
+		{
+			"src": "./image/favicon/android-chrome-192x192.png",
+			"sizes": "192x192",
+			"type": "image/png",
+			"purpose": "any"
+		},
+		{
+			"src": "./image/favicon/android-chrome-512x512.png",
+			"sizes": "512x512",
+			"type": "image/png",
+			"purpose": "any"
+		}
+	]
+}

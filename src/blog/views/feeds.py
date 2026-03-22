@@ -3,13 +3,13 @@ from django.urls import reverse
 from django.utils.feedgenerator import Atom1Feed as AtomFeed
 from django.utils.feedgenerator import Rss201rev2Feed as RssFeed
 
-from .models import Post
+from ..models import Post
 
 
 class LatestEntriesFeed(Feed):
     # TODO: find a way to get this from the context processor instead of hardcoding it here
     title = "Diary of a Polymath"
-    description = ""
+    description = "A personal knowledge journal and publishing space."
 
     @property
     def link(self):

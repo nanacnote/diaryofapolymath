@@ -1,6 +1,14 @@
 {% extends "base/index.html" %}
 
-{% block title %}Blog | {{ post.title }}{% endblock %}
+{% block meta_description %}{{ post.meta_description }}{% endblock %}
+{% block og_title %}{{ post.title }}{% endblock %}
+{% block og_description %}{{ post.subtitle }}{% endblock %}
+<!-- TODO: extend post model to have image_src_url -->
+{% block og_image %}{% endblock %}
+
+{% block head %}
+  <title>{{ copy.nav_blog }} | {{ post.title }}</title>
+{% endblock %}
 
 {% block content %}
 <section class="components-grid show-aside" style="margin-top: 5em;">
@@ -13,10 +21,9 @@
         <span style="color: var(--secondary-color);">{{ post.subtitle }}</span>
       </h1>
 
-      <div style="display: flex;">
-        {% include "blog/partials/post_stats.html" %}
-        <span style="flex: 1;"></span>
-        {% include "blog/partials/post_cta.html" %}
+      <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1em; margin: 0 0 1em 0">
+        <div>{% include "blog/partials/post_stats.html" %}</div>
+        <div>{% include "blog/partials/post_cta.html" %}</div>
       </div>
       {% include "blog/partials/post_tags.html" %}
 

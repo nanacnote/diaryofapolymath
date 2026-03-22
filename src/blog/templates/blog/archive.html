@@ -1,16 +1,18 @@
 {% extends "base/index.html" %}
 
-{% block title %}Blog | Archive{% endblock %}
+{% block head %}
+  <title>{{ copy.nav_blog }} | {{ copy.common_archived|add:" "|add:request.resolver_match.kwargs.slug }}</title>
+{% endblock %}
 
 {% block content %}
 <section class="components-grid show-aside" style="margin-top: 5em;">
   <main>
-    <div id="title-banner">{{request.resolver_match.kwargs.slug|add:" Archive"}}</div>
+    <div id="title-banner">{{ copy.common_archived|add:" "|add:request.resolver_match.kwargs.slug }}</div>
     {% for post in posts %}
       <div id="{{ post.slug }}">
         <h1>{{ post.title }}</h1>
           {% include "blog/partials/post_stats.html" %}
-          <p style="color: var(--secondary-color); text-align: justify;">{{ post.abstract}}</p>
+          <p style="color: var(--secondary-color); text-align: justify;">{{ post.abstract }}</p>
           {% include "blog/partials/post_tags.html" %}
           <div>
             <a class="no-hover-bg btn btn-default btn-ghost" style="margin-top: 1em;" href="{% url 'blog:post' post.slug %}">Read More</a>

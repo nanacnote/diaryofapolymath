@@ -1,24 +1,48 @@
 {% load static %}
 
+{% now "U" as favicon_v %}
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="{% block meta_description %}{{ copy.meta_site_description }}{% endblock %}" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#1a95e0" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#62c4ff" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="{{ copy.meta_site_name }}" />
+    <meta name="twitter:card" content="summary" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="{{ copy.meta_site_name }}" />
+    <meta property="og:url" content="{{ request.build_absolute_uri }}" />
+    <meta property="og:title" content="{% block og_title %}{{ copy.meta_site_name }}{% endblock %}" />
+    <meta property="og:description" content="{% block og_description %}{{ copy.meta_site_description }}{% endblock %}" />
+    <meta property="og:image" content="{% block og_image %}{% static 'base/image/og/default.webp' %}?v={{ favicon_v }}{% endblock %}" />
+    <meta property="og:logo" content="{% static 'base/image/favicon/apple-touch-icon.png' %}?v={{ favicon_v }}" />
+
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'base/image/favicon/apple-touch-icon.png' %}?v={{ favicon_v }}" />
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'base/image/favicon/favicon-32x32.png' %}?v={{ favicon_v }}" />
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'base/image/favicon/favicon-16x16.png' %}?v={{ favicon_v }}" />
+    <link rel="icon" href="{% static 'base/image/favicon/favicon.ico' %}?v={{ favicon_v }}" />
+    <link rel="manifest" href="{% static 'base/site.webmanifest' %}?v={{ favicon_v }}" />
     <link type="text/css" rel="stylesheet" href="{% static 'base/css/normalize.min.css' %}" />
     <link type="text/css" rel="stylesheet" href="{% static 'base/css/jquery-ui.min.css' %}" />
-    <link type="text/css" rel="stylesheet" href="{% static 'base/css/jquery-ui-1.12.icon-font.min.css' %}" />
+    <!-- <link type="text/css" rel="stylesheet" href="{% static 'base/css/jquery-ui-1.12.icon-font.min.css' %}" /> -->
     <link type="text/css" rel="stylesheet" href="{% static 'base/css/material-icons.min.css' %}" />
+    <link type="text/css" rel="stylesheet" href="{% static 'base/css/icomoon.min.css' %}" />
     <link type="text/css" rel="stylesheet" href="{% static 'base/css/terminal.css' %}" />
+    <link type="text/css" rel="stylesheet" href="{% static 'base/css/custom.css' %}" />
     <link type="text/css" rel="stylesheet" href="{% static 'base/css/theme.css' %}" />
     <link type="text/css" rel="stylesheet" href="{% static 'base/css/pygment.css' %}" />
+
     <script type="text/javascript" src="{% static 'base/js/vendors/jquery/jquery.js' %}" defer></script>
     <script type="text/javascript" src="{% static 'base/js/vendors/jquery/jquery-ui.min.js' %}" defer></script>
     <script type="text/javascript" src="{% static 'base/js/dist/index.iife.js' %}" defer></script>
+
     {% block head %}{% endblock %}
-    <!-- TODO: implement detailed head with manifest comment out unused styles -->
-    <title>{% block title %}{% endblock %}</title>
   </head>
   <body class="terminal container container-fluid theme-{{ session_theme }}">
     {% include "base/partials/navbar.html" %}

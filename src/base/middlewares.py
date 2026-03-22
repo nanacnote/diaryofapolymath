@@ -29,7 +29,19 @@ class SessionThemeMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
+        color_scheme = request.headers.get("Sec-CH-Prefers-Color-Scheme")
+        if color_scheme in ["light", "dark"]:
+            request.color_scheme = color_scheme
+
         theme = request.GET.get("theme")
         if theme in ["light", "dark"]:
             request.session["theme"] = theme
-        return self.get_response(request)
+
+        response = self.get_response(request)
+
+        response["Accept-CH"] = "Sec-CH-Prefers-Color-Scheme"
+        response["Critical-CH"] = "Sec-CH-Prefers-Color-Scheme"
+        response["Vary"] = "Sec-CH-Prefers-Color-Scheme"
+        response["Permissions-Policy"] = "ch-prefers-color-scheme=(self)"
+
+        return response

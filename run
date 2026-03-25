@@ -1,9 +1,15 @@
 #!/bin/sh
 
-set -e                                    # exit execution if a command fails
-set -a                                    # set marking all created and all modified variables for export
-[ ! -f ./.env ] || . ./.env               # load environment variables
-set +a                                    # unset marking variables for export
+set -e                                    # exit on command failure
+set -a                                    # export all variables loaded from .env
+[ ! -f ./.env ] || . ./.env               # load environment variables if present
+set +a                                    # stop auto-exporting variables
+set -u                                    # fail on unset variables after environment is loaded
+
+LOG_FILE=./local.dev.log
+PID_FILE=./local.dev.pid
+DJANGO_PID=
+VITE_PID=
 
 show_help() {
   cat <<-EOF
@@ -12,6 +18,7 @@ show_help() {
 
     Commands:
       start:dev                 Start both Django and Vite servers.
+      stop:dev                  Stop Django and Vite using the saved PID file.
       start:django:debugger     Start the Django server in pdb (debugger) mode.
       start:lint                Scan the codebase and report any linting issues.
       start:lint:fix            Scan the codebase and automatically fix any linting issues.
@@ -19,37 +26,75 @@ show_help() {
       start:release             In CI, tag the main branch with a release version number and include a change log.
       start:prod                Starts the Supervisor daemon. Used in production.
 EOF
-exit 1 # Exit script after printing help
+  exit 1
 }
 
-kill_all_processes() {
-  echo ""
-  echo "**Attempting a graceful shutdown**"
-  kill -15 "$PID_1" &&
-  echo "**Successfully terminated Django process [$PID_1]**"
-  kill -15 "$PID_2" &&
-  echo "**Successfully terminated Vite process [$PID_2]**"
-  rm -rf local.dev.log &&
-  echo "**Successfully deleted log file at [./local.dev.log]**"
-  exit 0
+require_command() {
+  if ! command -v "$1" >/dev/null 2>&1; then
+    echo "$1 is not installed. Please install it and try again." >&2
+    exit 1
+  fi
+}
+
+graceful_stop() {
+  pid="$1"
+  name="$2"
+
+  [ -n "$pid" ] || return 0
+  if kill -0 "$pid" 2>/dev/null; then
+    kill -TERM "$pid" 2>/dev/null || true
+    echo "Stopped $name process [$pid]"
+  fi
+}
+
+cleanup() {
+  echo
+  echo "Attempting graceful shutdown"
+  graceful_stop "$DJANGO_PID" "Django"
+  graceful_stop "$VITE_PID" "Vite"
+  rm -f "$PID_FILE"
+  rm -f "$LOG_FILE"
+}
+
+write_pid_file() {
+  umask 077
+  {
+    echo "DJANGO_PID=$DJANGO_PID"
+    echo "VITE_PID=$VITE_PID"
+  } >"$PID_FILE"
+  echo "Saved process IDs to $PID_FILE"
+}
+
+stop_dev_servers() {
+  if [ ! -f "$PID_FILE" ]; then
+    echo "No PID file found at $PID_FILE. Nothing to stop."
+    exit 1
+  fi
+
+  DJANGO_PID=
+  VITE_PID=
+  . "$PID_FILE"
+
+  echo "Stopping processes listed in $PID_FILE"
+  graceful_stop "${DJANGO_PID:-}" "Django"
+  graceful_stop "${VITE_PID:-}" "Vite"
+  rm -f "$PID_FILE"
+  rm -f "$LOG_FILE"
+  echo "Cleanup complete"
 }
 
 check_pipenv_env() {
-  if command -v pipenv >/dev/null 2>&1 ; then
-    echo "Pipenv is installed!"
-    if [ -z "$(pipenv --venv)" ]; then
-        echo >&2 "Pipenv is not running in a Pipenv environment. Starting a new Pipenv shell..."
-        pipenv shell
-    else
-        echo >&2 "Pipenv is running in a Pipenv environment located at $(pipenv --venv)"
-    fi
+  require_command pipenv
+  if [ -n "${PIPENV_ACTIVE:-}" ]; then
+    echo "Pipenv environment is active."
   else
-    echo "Pipenv is not installed. Please install Pipenv and try again."
+    echo "Pipenv environment is not active. Activate it first (for example: pipenv shell)." >&2
     exit 1
   fi
 }
 
 check_node_version() {
+  require_command node
   node_version=$(node -v | cut -c 2-)
   if [ "$(printf '%s\n' "16" "$node_version" | sort -V | head -n1)" = "16" ]; then
     echo >&2 "Node.js version 16 or above is installed. Continuing..."
@@ -60,6 +105,7 @@ check_node_version() {
 }
 
 check_python_version() {
+  require_command python3
   python_version=$(python3 -c 'import platform; print(platform.python_version())')
   if [ "$(printf '%s\n' "3.9" "$python_version" | sort -V | head -n1)" = "3.9" ]; then
     echo "Python version 3.9 or above is installed. Continuing..."
@@ -70,55 +116,75 @@ check_python_version() {
 }
 
 setup_goatcounter_db() {
+  require_command goatcounter
   goatcounter db create site \
-    -vhost $GOATCOUNTER_DOMAIN_NAME \
-    -user.email $GOATCOUNTER_EMAIL \
-    -user.password $GOATCOUNTER_PASSWORD \
-    -db $GOATCOUNTER_DATABASE_URI \
+    -vhost "$GOATCOUNTER_DOMAIN_NAME" \
+    -user.email "$GOATCOUNTER_EMAIL" \
+    -user.password "$GOATCOUNTER_PASSWORD" \
+    -db "$GOATCOUNTER_DATABASE_URI" \
     -createdb || true
 }
 
 setup_django_db() {
+  require_command django-admin
   django-admin migrate --no-input
 }
 
 start_django_dev_server() {
-  django-admin runserver 2>&1 >>local.dev.log &
-  PID_1=$!
+  django-admin runserver >>"$LOG_FILE" 2>&1 &
+  DJANGO_PID=$!
 }
 
 start_vite_dev_server() {
-  npm start --color=always 2>&1 >>local.dev.log &
-  PID_2=$!
+  require_command npm
+  npm start --color=always >>"$LOG_FILE" 2>&1 &
+  VITE_PID=$!
 }
 
-if [ "$1" = "start:dev" ]; then
-  trap kill_all_processes INT TERM QUIT
-  setup_django_db
-  check_pipenv_env
-  check_python_version
-  check_node_version
-  start_django_dev_server
-  start_vite_dev_server
-  tail -f local.dev.log
-elif [ "$1" = "start:django:debugger" ]; then
-  python -m pdb ./src/manage.py runserver
-elif [ "$1" = "start:lint" ]; then
-  flake8 ./src
-elif [ "$1" = "start:lint:fix" ]; then
-  isort ./src \
-    && black ./src \
-    && flake8 ./src
-elif [ "$1" = "start:test" ]; then
-  shift
-  pytest "$@"
-elif [ "$1" = "start:release" ]; then
-  shift
-  npx semantic-release "$@"
-elif [ "$1" = "start:prod" ]; then
-  setup_goatcounter_db
-  setup_django_db
-  supervisord
-else
-  show_help
-fi
+command_name="${1:-}"
+[ -n "$command_name" ] || show_help
+shift || true
+
+case "$command_name" in
+  start:dev)
+    trap cleanup EXIT INT TERM QUIT
+    : >"$LOG_FILE"
+    check_pipenv_env
+    check_python_version
+    check_node_version
+    setup_django_db
+    start_django_dev_server
+    start_vite_dev_server
+    write_pid_file
+    echo "Use '$0 stop:dev' to stop these processes from another terminal."
+    tail -f "$LOG_FILE"
+    ;;
+  stop:dev)
+    stop_dev_servers
+    ;;
+  start:django:debugger)
+    python3 -m pdb ./src/manage.py runserver
+    ;;
+  start:lint)
+    flake8 ./src
+    ;;
+  start:lint:fix)
+    isort ./src &&
+      black ./src &&
+      flake8 ./src
+    ;;
+  start:test)
+    pytest "$@"
+    ;;
+  start:release)
+    npx semantic-release "$@"
+    ;;
+  start:prod)
+    setup_goatcounter_db
+    setup_django_db
+    supervisord
+    ;;
+  *)
+    show_help
+    ;;
+esac

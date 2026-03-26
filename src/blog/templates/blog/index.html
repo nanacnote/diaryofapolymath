@@ -14,7 +14,9 @@
       <div id="{{ post.slug }}">
         <h1>{{ post.title }}</h1>
           {% include "blog/partials/post_stats.html" %}
-          <p style="color: var(--secondary-color); text-align: justify;">{{ post.abstract}}</p>
+          <div style="margin-top: 1em;">
+            <p style="color: var(--secondary-color); text-align: justify;">{{ post.abstract}}</p>
+          </div>
           {% include "blog/partials/post_tags.html" %}
           <div>
             <a class="no-hover-bg btn btn-default btn-ghost" style="margin-top: 1em;" href="{% url 'blog:post' post.slug %}">Read More</a>

@@ -13,11 +13,15 @@ def copy_processor(request):
             "nav_blog": "Blog",
             "nav_exclusive": "Exclusive",
             "common_powered_by": "Powered by",
+            "common_tags": "Tags",
             "common_tagged": "Tagged",
+            "common_archive": "Archive",
             "common_archived": "Archived",
+            "common_pinned": "Pinned",
             "common_shared_by": "Shared by",
             "common_like": "Like",
             "common_comment": "Comment",
             "common_copy_link": "Copy link",
+            "common_image_of_sponsor": "Image of sponsor",
         }
     }

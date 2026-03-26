@@ -25,6 +25,7 @@ class Post(models.Model):
     subtitle = models.CharField(max_length=255, blank=True)
     meta_description = models.CharField(max_length=150, blank=True)
     slug = models.SlugField(max_length=255, unique=True)
+    image_src_url = models.TextField(blank=True, null=True)
     created_on = models.DateTimeField(auto_now_add=True)
     modified_on = models.DateTimeField(auto_now=True)
     published_on = models.DateTimeField(blank=True, null=True)

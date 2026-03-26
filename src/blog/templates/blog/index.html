@@ -9,7 +9,7 @@
 {% block content %}
 <section class="components-grid show-aside" style="margin-top: 5em;">
   <main>
-    <div id="title-banner">Blog</div>
+    <div id="title-banner">{{ copy.nav_blog }}</div>
     {% for post in posts %}
       <div id="{{ post.slug }}">
         <h1>{{ post.title }}</h1>

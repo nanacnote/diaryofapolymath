@@ -3,8 +3,7 @@
 {% block meta_description %}{{ post.meta_description }}{% endblock %}
 {% block og_title %}{{ post.title }}{% endblock %}
 {% block og_description %}{{ post.subtitle }}{% endblock %}
-<!-- TODO: extend post model to have image_src_url -->
-{% block og_image %}{% endblock %}
+{% block og_image %}{{ post.image_src_url }}{% endblock %}
 
 {% block head %}
   <title>{{ copy.nav_blog }} | {{ post.title }}</title>
@@ -31,7 +30,15 @@
         <span style="color: var(--secondary-color); font-style: italic;">{{ post.abstract}}</span>
       </div>
 
-      <div style="text-align: justify;" data-controller="content-parser">{{ post.body }}</div>
+      {% if post.image_src_url %}
+      <div style="margin: 0 0 2em 0;">
+        <img src="{{ post.image_src_url }}" alt="{{ post.title }}" style="width: 100%; max-height: 300px; object-fit: cover; display: block; border-radius: 0.25em;">
+      </div>
+      {% endif %}
+
+      <div style="text-align: justify;" data-controller="content-parser">
+        {{ post.body }}
+      </div>
 
       <div style="display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 2em;">
         <span style="display: flex; flex: 1 1 0; min-width: min(275px, 100%);">
@@ -51,6 +58,7 @@
           {% endif %}
         </span>
       </div>
+      {% include "blog/partials/post_comments.html" %}
     </div>
   </main>
   {% include "blog/partials/aside_menu.html" %}

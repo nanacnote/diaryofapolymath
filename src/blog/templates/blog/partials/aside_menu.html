@@ -1,12 +1,11 @@
 <aside>
     <div style="position: sticky; top: 25px;">
       <div>
-        <h1>Pinned</h1>
-        <!-- Todo: add image src -->
-        <img style="border-radius: 0.25em;" width="205px" height="auto" alt="image of sponsor" src="https://cdn.metal.bohyen.space/public/diaryofapolymath/pinned-00.webp?w=250&h=250&fit=crop">
+        <h1>{{ copy.common_pinned }}</h1>
+        <img style="border-radius: 0.25em;" width="205px" height="auto" alt="{{ copy.common_image_of_sponsor }}" src="https://cdn.metal.bohyen.space/public/diaryofapolymath/pinned-00.webp?w=250&h=250&fit=crop">
       </div>
       <div>
-        <h1>Tags</h1>
+        <h1>{{ copy.common_tags }}</h1>
         <ul>
           {% for tag in tags %}
             <li>
@@ -20,7 +19,7 @@
         </ul>
       </div>
       <div>
-        <h1>Archive</h1>
+        <h1>{{ copy.common_archive }}</h1>
         <ul>
           {% for archive in archives %}
             <li>

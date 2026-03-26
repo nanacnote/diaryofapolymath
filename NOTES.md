@@ -19,3 +19,24 @@ ffmpeg -i input.jpg \
 -q:v 80 \
 output.webp
 ```
+
+Create and apply Django migrations after modifying the `models.py` file:
+```bash
+django-admin makemigrations         # Generate new migration files based on model changes
+django-admin migrate --no-input     # Apply migrations to the database
+```
+
+Additional useful Django migration commands:
+```bash
+# Show pending migrations
+django-admin showmigrations
+
+# Show SQL for a specific migration (preview before applying)
+django-admin sqlmigrate <app> <migration_name>
+
+# Roll back a migration
+django-admin migrate <app> <previous_migration_name>
+
+# Create empty migration for custom SQL
+django-admin makemigrations --empty <app> --name <description>
+```

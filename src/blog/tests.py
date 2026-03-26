@@ -56,6 +56,7 @@ class TestBlogModels:
             "subtitle",
             "meta_description",
             "slug",
+            "image_src_url",
             "created_on",
             "modified_on",
             "published_on",
@@ -111,10 +112,11 @@ class TestBlogViews:
                 "blog/partials/post_tags.html",
                 "blog/partials/post_stats.html",
                 "blog/partials/post_cta.html",
+                "blog/partials/post_comments.html",
             ]
         )
         assert all(
-            attr in response.context for attr in ["post", "prev", "next", "tags", "archives"]
+            attr in response.context for attr in ["post", "prev", "next", "tags", "archives", "comment_form"]
         )
 
     @pytest.mark.parametrize("factory_class", ["PostFactory"], indirect=True)

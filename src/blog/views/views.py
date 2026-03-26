@@ -14,6 +14,8 @@ def post(request, slug):
     (post, prev, next) = Post.objects.get_current_prev_next_posts(slug)
     tags = Post.objects.group_posts_by_tag_with_count()
     archives = Post.objects.group_posts_by_year_with_count()
+    # TODO: Implement comment form
+    comment_form = {"email": {"id_for_label": "email", "label": "Email"}, "body": {"id_for_label": "body", "label": "Comment"}}
     return render(request, "blog/post.html", locals())
 
 

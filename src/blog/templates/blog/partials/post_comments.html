@@ -38,16 +38,16 @@
                 The comment form is currently disabled while I work on improving the comment system. In the meantime, if you have any feedback or suggestions, please feel free to <a href="mailto:owusu@bohyen.com">contact me</a>.
 
                 <div class="form-group">
-                    <label for="{{ comment_form.email.id_for_label }}">{{ comment_form.email.label }}</label>
-                    {{ comment_form.email }}
+                    <!-- <label for="{{ comment_form.email.id_for_label }}">{{ comment_form.email.label }}</label> -->
+                    <!-- {{ comment_form.email }} -->
                     {% if comment_form.email.errors %}
                     <p style="color: var(--error-color); margin-top: 0.25em;">{{ comment_form.email.errors|join:", " }}</p>
                     {% endif %}
                 </div>
 
                 <div class="form-group">
-                    <label for="{{ comment_form.body.id_for_label }}">{{ comment_form.body.label }}</label>
-                    {{ comment_form.body }}
+                    <!-- <label for="{{ comment_form.body.id_for_label }}">{{ comment_form.body.label }}</label> -->
+                    <!-- {{ comment_form.body }} -->
                     {% if comment_form.body.errors %}
                     <p style="color: var(--error-color); margin-top: 0.25em;">{{ comment_form.body.errors|join:", " }}</p>
                     {% endif %}

@@ -13,7 +13,9 @@ def index(request):
 
 
 def post(request, slug):
+    # TODO: handle when form errors so we scroll to the form section
     comment_form = CommentForm()
+
     if request.method == "POST" and not (comment_form := postCommentPOST(request, slug)):
         return redirect(
             f"{reverse('blog:post', kwargs={'slug': slug})}?submitted=1#post-comment-form"

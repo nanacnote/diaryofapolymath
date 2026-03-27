@@ -58,6 +58,7 @@ class CommentManager(Manager):
         )
 
     def get_comments_grouped_by_parent_for_post(self, post_id):
+        # TODO: use pure orm without iterating in python to group comments by parent.
         comments = list(
             self.filter(post_id=post_id, approved=True, deleted=False)
             .select_related("parent")

@@ -112,11 +112,12 @@ class TestBlogViews:
                 "blog/partials/post_tags.html",
                 "blog/partials/post_stats.html",
                 "blog/partials/post_cta.html",
-                "blog/partials/post_comments.html",
+                "blog/partials/post_comments/index.html",
             ]
         )
         assert all(
-            attr in response.context for attr in ["post", "prev", "next", "tags", "archives", "comment_form"]
+            attr in response.context
+            for attr in ["post", "prev", "next", "tags", "archives", "comments", "comment_form"]
         )
 
     @pytest.mark.parametrize("factory_class", ["PostFactory"], indirect=True)

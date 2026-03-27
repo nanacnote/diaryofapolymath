@@ -18,7 +18,7 @@ def post(request, slug):
 
     if request.method == "POST" and not (comment_form := postCommentPOST(request, slug)):
         return redirect(
-            f"{reverse('blog:post', kwargs={'slug': slug})}?submitted=1#post-comment-form"
+            f"{reverse('blog:post', kwargs={'slug': slug})}?submitted=1"
         )
 
     (post, prev, next) = Post.objects.get_current_prev_next_posts(slug)

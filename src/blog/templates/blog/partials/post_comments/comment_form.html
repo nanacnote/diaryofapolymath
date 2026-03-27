@@ -11,13 +11,13 @@
             <a id="reply-target-cancel" href="#post-comment-form">Cancel</a>
         </p>
 
-        <div class="form-group">
+        <!-- <div class="form-group">
             <label for="{{ comment_form.name.id_for_label }}">{{ comment_form.name.label }}</label>
             {{ comment_form.name }}
             {% if comment_form.name.errors %}
             <p style="color: var(--error-color); margin-top: 0.25em;">{{ comment_form.name.errors|join:", " }}</p>
             {% endif %}
-        </div>
+        </div> -->
 
         <div class="form-group">
             <label for="{{ comment_form.email.id_for_label }}">{{ comment_form.email.label }}</label>
@@ -38,7 +38,7 @@
         {{ comment_form.parent }}
 
         <div class="form-group">
-            <button class="no-hover-bg btn btn-default btn-ghost btn-block" type="submit">Submit comment</button>
+            <button class="no-hover-bg btn btn-default btn-ghost btn-block" type="submit">{{ copy.common_submit_comment }}</button>
         </div>
     </fieldset>
 </form>

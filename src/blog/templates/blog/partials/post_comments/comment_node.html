@@ -1,16 +1,21 @@
-<article style="margin-bottom: var(--global-line-height);">
-    <!-- TODO: style this better -->
-    <header style="display: flex; justify-content: space-between; align-items: baseline; gap: 1em; opacity: 0.7; font-size: 0.85em; margin-bottom: 0.25em;">
-        <span>{{ comment.name|default:comment.email }}</span>
-        <time datetime="{{ comment.created_on|date:'c' }}">{{ comment.created_on|date:"N j, Y" }}</time>
+{% load post_utils %}
+
+<article>
+    <header>
+        <span style="font-weight: bold; font-size: small;">{{ comment.name|default:comment.email|email_to_name }}</span>
+        <span>&nbsp;&middot;&nbsp;</span>
+        <time style="color: var(--secondary-color); font-size: smaller;" datetime="{{ comment.created_on|date:'c' }}">{{ comment.created_on|time_ago }}</time>
     </header>
-    <p>{{ comment.content|linebreaksbr }}</p>
-    <p>
-        <a href="#post-comment-form" data-reply-to="{{ comment.id }}" data-reply-author="{{ comment.name|default:comment.email }}" data-reply-snippet="{{ comment.content|striptags|truncatechars:80 }}">Reply</a>
-    </p>
+    <div>
+        <div style="font-size: medium;">{{ comment.content|linebreaksbr }}</div>
+        <div style="font-size: smaller; margin: 0.25em 0 1.5em 0;">
+            <a href="#post-comment-form" data-reply-to="{{ comment.id }}" data-reply-author="{{ comment.name|default:comment.email|email_to_name }}" data-reply-snippet="{{ comment.content|striptags|truncatechars:80 }}">{{ copy.common_reply }}</a>
+        </div>
+    </div>
 
     {% if comment.children %}
-    <div style="margin-left: 2em;">
+    <!-- TODO: consider using a collapsible details/summary element for nested replies if replies become too numerous -->
+    <div style="border-left: 1px solid color-mix(in srgb, var(--secondary-color) 15%, transparent); padding-left: 2em;">
         {% for comment in comment.children %}
             {% include "blog/partials/post_comments/comment_node.html" %}
         {% endfor %}

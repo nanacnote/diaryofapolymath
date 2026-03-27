@@ -1,0 +1,28 @@
+<div>
+    <hr/>
+
+    <section>
+        <header><h2 id="post-comment-section">Comments</h2></header>
+
+        {% if comments %}
+            {% for comment in comments %}
+                {% include "blog/partials/post_comments/comment_node.html" %}
+            {% endfor %}
+            <hr />
+        {% else %}
+            <p style="text-align: center;">
+                <span class="material-symbols-rounded material-icon-comment" style="font-size: 48px; color: var(--secondary-color); opacity: 0.25;"></span>
+                <br/>
+                <span style="font-weight: bolder;">No comments yet</span>
+                <br/>
+                <span style="color: var(--secondary-color);">Be the first to comment!</span>
+            </p>
+        {% endif %}
+
+        {% if request.GET.submitted %}
+        <p><strong>Thank you — your comment has been submitted and is pending review.</strong></p>
+        {% endif %}
+
+        {% include "blog/partials/post_comments/comment_form.html" %}
+    </section>
+</div>

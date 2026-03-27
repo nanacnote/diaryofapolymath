@@ -2,6 +2,9 @@ from django.db.models import Count, F, Manager, Q
 
 
 class PostManager(Manager):
+    def get_post_by_slug(self, slug):
+        return self.get(slug=slug)
+
     def get_published_posts(self):
         return self.filter(published=True).prefetch_related("tags")
 
@@ -43,3 +46,30 @@ class PostManager(Manager):
             .annotate(count=Count("year"))
             .order_by("-year")
         )
+
+
+class CommentManager(Manager):
+    def get_comments_for_post(self, post_id):
+        return self.filter(post_id=post_id, approved=True, deleted=False).order_by("created_on")
+
+    def get_replies_for_comment(self, comment_id):
+        return self.filter(parent_id=comment_id, approved=True, deleted=False).order_by(
+            "created_on"
+        )
+
+    def get_comments_grouped_by_parent_for_post(self, post_id):
+        comments = list(
+            self.filter(post_id=post_id, approved=True, deleted=False)
+            .select_related("parent")
+            .order_by("created_on")
+        )
+
+        children_by_parent = {}
+        for comment in comments:
+            comment.children = []
+            children_by_parent.setdefault(comment.parent_id, []).append(comment)
+
+        for comment in comments:
+            comment.children = children_by_parent.get(comment.id, [])
+
+        return children_by_parent.get(None, [])

@@ -49,14 +49,6 @@ class PostManager(Manager):
 
 
 class CommentManager(Manager):
-    def get_comments_for_post(self, post_id):
-        return self.filter(post_id=post_id, approved=True, deleted=False).order_by("created_on")
-
-    def get_replies_for_comment(self, comment_id):
-        return self.filter(parent_id=comment_id, approved=True, deleted=False).order_by(
-            "created_on"
-        )
-
     def get_comments_grouped_by_parent_for_post(self, post_id):
         # TODO: use pure orm without iterating in python to group comments by parent.
         comments = list(

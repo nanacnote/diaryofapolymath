@@ -24,9 +24,12 @@ def copy_processor(request):
             "common_image_of_sponsor": "Image of sponsor",
             "common_reply": "Reply",
             "common_submit": "Submit",
+            "common_cancel": "Cancel",
+            "common_upvote": "Upvote",
             "common_submit_comment": "Submit Comment",
             "common_comment": "Comment",
             "common_comments": "Comments",
+            "common_leave_a_comment": "Leave a comment",
             "common_no_comments_yet": "No comments yet",
             "common_be_the_first_to_comment": "Be the first to comment!",
             "common_comment_submitted_message": "Thank you — your comment has been submitted and is pending review."

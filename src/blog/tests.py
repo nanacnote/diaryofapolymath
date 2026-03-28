@@ -4,7 +4,9 @@ import pytest
 from django.db import IntegrityError
 from django.urls import reverse
 
-from blog.models import Post, Tag
+from blog.forms import CommentForm
+from blog.models import Comment, Post, Tag
+from blog.templatetags.post_utils import email_to_name
 
 
 @pytest.mark.django_db
@@ -78,6 +80,43 @@ class TestBlogModels:
         assert str(post) == post.title
         assert all(hasattr(Post, attr) for attr in allowed_fields)
 
+    @pytest.mark.parametrize(
+        "field_name, field_value, error_message",
+        [
+            ("email", None, "NOT NULL"),
+            ("content", None, "NOT NULL"),
+        ],
+    )
+    @pytest.mark.parametrize("factory_class", ["CommentFactory"], indirect=True)
+    def test_comment_model_has_expected_fields_and_constraints(
+        self, factory_class, field_name, field_value, error_message
+    ):
+        allowed_fields = [
+            "id",
+            "post",
+            "parent",
+            "email",
+            "name",
+            "content",
+            "created_on",
+            "modified_on",
+            "approved",
+            "deleted",
+        ]
+        comment = Comment.objects.first()
+        with pytest.raises(IntegrityError) as error:
+            factory_class.create(
+                **{
+                    field_name: getattr(comment, field_value)
+                    if hasattr(comment, str(field_value))
+                    else field_value
+                }
+            )
+        assert error_message in str(error.value)
+        assert len(Comment._meta._get_fields(reverse=False)) == len(allowed_fields)
+        assert str(comment) == comment.content[:20]
+        assert all(hasattr(Comment, attr) for attr in allowed_fields)
+
 
 @pytest.mark.django_db
 class TestBlogViews:
@@ -97,9 +136,15 @@ class TestBlogViews:
         )
         assert all(attr in response.context for attr in ["posts", "tags", "archives"])
 
-    @pytest.mark.parametrize("factory_class", ["PostFactory"], indirect=True)
+    @pytest.mark.parametrize("factory_class", [["PostFactory", "CommentFactory"]], indirect=True)
     def test_post_page_renders_correctly(self, client, factory_class):
-        post = factory_class.create(published=True)
+        post_factory, comment_factory = factory_class
+        post = post_factory.create(published=True)
+        comment_1 = comment_factory.create(post=post, approved=True, deleted=False)
+        comment_2 = comment_factory.create(post=post, approved=True, deleted=False)
+        reply_comment_1 = comment_factory.create(
+            post=post, parent=comment_1, approved=True, deleted=False
+        )
         response = client.get(reverse("blog:post", kwargs={"slug": post.slug}))
 
         assert response.status_code == HTTPStatus.OK
@@ -119,6 +164,35 @@ class TestBlogViews:
             attr in response.context
             for attr in ["post", "prev", "next", "tags", "archives", "comments", "comment_form"]
         )
+        # assert that comments are grouped by parent comment in the context as expected
+        assert {
+            (c.id, tuple(sorted(ch.id for ch in c.children))) for c in response.context["comments"]
+        } == {(comment_1.id, (reply_comment_1.id,)), (comment_2.id, ())}
+
+    def test_post_page_renders_on_POST_request(self, client):
+        post = Post.objects.first()
+
+        # valid POST
+        response = client.post(
+            reverse("blog:post", kwargs={"slug": post.slug}),
+            data={"email": "john.doe@example.com", "content": "This is a test comment."},
+        )
+
+        assert response.status_code == HTTPStatus.FOUND
+        assert response.url == f"{reverse('blog:post', kwargs={'slug': post.slug})}?submitted=1"
+
+        # invalid POST (missing content)
+        response = client.post(
+            reverse("blog:post", kwargs={"slug": post.slug}),
+            data={
+                "email": "john.doe@example.com",
+                "content": "no",
+            },  # less than 3 char content to trigger validation error
+        )
+        assert response.status_code == HTTPStatus.OK
+        assert isinstance(response.context["comment_form"], CommentForm)
+        assert response.context["comment_form"].errors
+        # TODO: assert that the form has the expected validation error for the content field
 
     @pytest.mark.parametrize("factory_class", ["PostFactory"], indirect=True)
     def test_archive_page_renders_correctly(self, client, factory_class):
@@ -158,9 +232,6 @@ class TestBlogViews:
         )
         assert all(attr in response.context for attr in ["posts", "tags", "archives"])
 
-
-@pytest.mark.django_db
-class TestBlogFeeds:
     def test_rss_feed_renders_correctly(self, client):
         response = client.get(reverse("blog:rss"))
 
@@ -179,6 +250,15 @@ class TestBlogFeeds:
         assert all(
             attr in response.content.decode("utf-8") for attr in ["<feed", "<entry", "</feed>"]
         )
+
+
+@pytest.mark.django_db
+class TestBlogTemplateTags:
+    def test_email_to_name_returns_name_from_email(self):
+        assert email_to_name("john.doe@example.com") == "John Doe"
+        assert email_to_name("a_b.c@example.com") == "A B C"
+        assert email_to_name("123@example.com") == "123"
+        assert email_to_name("&^%$@example.com") == "&^%$"
 
 
 @pytest.mark.django_db

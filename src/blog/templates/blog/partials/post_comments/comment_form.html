@@ -1,0 +1,48 @@
+<form id="post-comment-form" method="POST" action="{% url 'blog:post' post.slug %}">
+    {% csrf_token %}
+    <fieldset>
+        <legend>{{ copy.common_leave_a_comment }}</legend>
+
+        <p id="reply-target-indicator" data-comment-reply-target="indicator" hidden>
+            <span id="reply-target-text" style="font-weight: bold; font-size: small;" data-comment-reply-target="indicatorText"></span>
+            <br/>
+            <span style="font-size: medium;">
+                <span id="reply-target-snippet" data-comment-reply-target="indicatorSnippet" style="color: var(--secondary-color)"></span>
+                <span>&nbsp;&middot;&nbsp;</span>
+            </span>
+            <span style="font-size: smaller;">
+                <a id="reply-target-cancel" href="#post-comment-form" data-action="click->comment-reply#clear">{{ copy.common_cancel }}</a>
+            </span>
+        </p>
+
+        <!-- <div class="form-group">
+            <label for="{{ comment_form.name.id_for_label }}">{{ comment_form.name.label }}</label>
+            {{ comment_form.name }}
+            {% if comment_form.name.errors %}
+            <p data-comment-reply-target="errorMessage" style="color: var(--error-color); margin-top: 0.25em;">{{ comment_form.name.errors|join:", " }}</p>
+            {% endif %}
+        </div> -->
+
+        <div class="form-group">
+            <label for="{{ comment_form.email.id_for_label }}">{{ comment_form.email.label }}</label>
+            {{ comment_form.email }}
+            {% if comment_form.email.errors %}
+            <p data-comment-reply-target="errorMessage" style="color: var(--error-color); margin-top: 0.25em;">{{ comment_form.email.errors|join:", " }}</p>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ comment_form.content.id_for_label }}">{{ comment_form.content.label }}</label>
+            {{ comment_form.content }}
+            {% if comment_form.content.errors %}
+            <p data-comment-reply-target="errorMessage" style="color: var(--error-color); margin-top: 0.25em;">{{ comment_form.content.errors|join:", " }}</p>
+            {% endif %}
+        </div>
+
+        {{ comment_form.parent }}
+
+        <div class="form-group">
+            <button class="no-hover-bg btn btn-default btn-ghost btn-block" type="submit">{{ copy.common_submit_comment }}</button>
+        </div>
+    </fieldset>
+</form>

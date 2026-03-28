@@ -1,0 +1,26 @@
+{% load post_utils %}
+
+<article>
+    <header>
+        <span style="font-weight: bold; font-size: small;">{{ comment.name|default:comment.email|email_to_name }}</span>
+        <span>&nbsp;&middot;&nbsp;</span>
+        <time style="color: var(--secondary-color); font-size: smaller;" datetime="{{ comment.created_on|date:'c' }}">{{ comment.created_on|time_ago }}</time>
+    </header>
+    <div>
+        <div style="font-size: medium;">{{ comment.content|linebreaksbr }}</div>
+        <div style="font-size: smaller; margin: 0.25em 0 1.5em 0;">
+            <a id="comment-node-upvote-{{ comment.id }}" href="#comment-node-upvote-{{ comment.id }}">{{ copy.common_upvote }}</a>
+            <span>&nbsp;&middot;&nbsp;</span>
+            <a href="#post-comment-form" data-action="click->comment-reply#select" data-reply-to="{{ comment.id }}" data-reply-author="{{ comment.name|default:comment.email|email_to_name }}" data-reply-snippet="{{ comment.content|striptags|truncatechars:80 }}">{{ copy.common_reply }}</a>
+        </div>
+    </div>
+
+    {% if comment.children %}
+    <!-- TODO: consider using a collapsible details/summary element for nested replies if replies become too numerous -->
+    <div style="border-left: 1px solid color-mix(in srgb, var(--secondary-color) 15%, transparent); padding-left: 2em;">
+        {% for comment in comment.children %}
+            {% include "blog/partials/post_comments/comment_node.html" %}
+        {% endfor %}
+    </div>
+    {% endif %}
+</article>

@@ -40,3 +40,15 @@ django-admin migrate <app> <previous_migration_name>
 # Create empty migration for custom SQL
 django-admin makemigrations --empty <app> --name <description>
 ```
+
+### TODO:
+- [ ] Add post view count
+- [ ] Add post like feature
+- [ ] Add comment upvote feature
+- [ ] Add post search functionality
+- [ ] Add posts pagination
+- [ ] Add comment pagination
+- [ ] Add RSS feed css (allowing browsers to render the feed rather than downloading it as a file)
+- [ ] Add newsletter subscription form and functionality
+- [ ] Add sitemap.xml
+- [ ] Addd email verification for comment posting

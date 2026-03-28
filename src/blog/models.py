@@ -1,7 +1,7 @@
 from django.db import models
 
 from about.models import Profile
-from blog.managers import PostManager
+from blog.managers import CommentManager, PostManager
 
 
 class Tag(models.Model):
@@ -37,3 +37,25 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Comment(models.Model):
+    class Meta:
+        ordering = ["created_on"]
+
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments")
+    parent = models.ForeignKey(
+        "self", on_delete=models.CASCADE, related_name="replies", null=True, blank=True
+    )
+    email = models.EmailField(db_index=True)
+    name = models.CharField(max_length=255, blank=True)
+    content = models.TextField()
+    created_on = models.DateTimeField(auto_now_add=True)
+    modified_on = models.DateTimeField(auto_now=True)
+    approved = models.BooleanField(default=False)
+    deleted = models.BooleanField(default=False)
+
+    objects = CommentManager()
+
+    def __str__(self):
+        return self.content[:20]

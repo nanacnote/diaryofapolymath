@@ -1,0 +1,28 @@
+<div>
+    <hr/>
+
+    <section data-controller="comment-reply">
+        <header><h2 id="post-comment-section">{{ copy.common_comments }}</h2></header>
+
+        {% if comments %}
+            {% for comment in comments %}
+                {% include "blog/partials/post_comments/comment_node.html" %}
+            {% endfor %}
+            <hr />
+        {% else %}
+            <p style="text-align: center;">
+                <span class="material-symbols-rounded material-icon-comment" style="font-size: 48px; color: var(--secondary-color); opacity: 0.25;"></span>
+                <br/>
+                <span style="font-weight: bolder;">{{ copy.common_no_comments_yet }}</span>
+                <br/>
+                <span style="color: var(--secondary-color);">{{ copy.common_be_the_first_to_comment }}</span>
+            </p>
+        {% endif %}
+
+        {% if request.GET.submitted %}
+        <p data-comment-reply-target="submittedMessage"><strong>{{ copy.common_comment_submitted_message }}</strong></p>
+        {% endif %}
+
+        {% include "blog/partials/post_comments/comment_form.html" %}
+    </section>
+</div>

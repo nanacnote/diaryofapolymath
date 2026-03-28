@@ -10,7 +10,7 @@ import pytest
 from django.template.defaultfilters import slugify
 
 from about.models import Link, Profile, Timeline
-from blog.models import Post, Tag
+from blog.models import Comment, Post, Tag
 
 # --------------------------
 # ABOUT APP MODEL FACTORIES
@@ -73,6 +73,7 @@ class PostFactory(factory.django.DjangoModelFactory):
     subtitle = factory.Faker("sentence")
     meta_description = factory.Faker("sentence")
     slug = factory.LazyAttribute(lambda obj: slugify(obj.title))
+    image_src_url = factory.Faker("url")
     published_on = factory.Faker("date_time_this_year", tzinfo=datetime.timezone.utc)
     published = factory.Faker("boolean")
     abstract = factory.Faker("paragraph")
@@ -86,6 +87,19 @@ class PostFactory(factory.django.DjangoModelFactory):
         if extracted:
             for tag in extracted:
                 self.tags.add(tag)
+
+
+class CommentFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Comment
+
+    post = factory.SubFactory(PostFactory)
+    parent = None
+    email = factory.Faker("email")
+    name = factory.Faker("name")
+    content = factory.Faker("paragraph")
+    approved = factory.Faker("boolean")
+    deleted = factory.Faker("boolean")
 
 
 # ---------
@@ -104,7 +118,7 @@ def factory_class(request):
         if factory is None:  # pragma: no cover
             raise ValueError(f"No factory found with name '{param}'")
         factories.append(factory)
-    return factories[0] if not isinstance(request.param, list) else factories
+    return factories if isinstance(request.param, list) else factories[0]
 
 
 @pytest.fixture(scope="session")
@@ -118,8 +132,9 @@ def about_app_seeds():
 @pytest.fixture(scope="session")
 def blog_app_seeds():
     tags = TagFactory.build_batch(3)
-    posts = PostFactory.build(published=True, tags=tags)
-    return (tags, posts)
+    post = PostFactory.build(published=True, tags=tags)
+    comment = CommentFactory.build(approved=True, deleted=False, post=post)
+    return (tags, post, comment)
 
 
 @pytest.fixture(scope="session")
@@ -135,9 +150,10 @@ def django_db_setup(django_db_setup, django_db_blocker, about_app_seeds, blog_ap
         profile.save()
         for inst in links + timelines:
             inst.save()
-        # seed the db with 1 post and 3 tags
-        tags, posts = blog_app_seeds
+        # seed the db with 1 post having 3 tags and 1 comment
+        tags, post, comment = blog_app_seeds
         for inst in tags:
             inst.save()
-        posts.author = profile
-        posts.save()
+        post.author = profile
+        post.save()
+        comment.save()

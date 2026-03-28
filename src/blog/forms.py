@@ -15,7 +15,7 @@ class CommentForm(forms.ModelForm):
         }
 
     def clean_content(self):
-        value = self.cleaned_data["content"].strip()
-        if not value:
-            raise forms.ValidationError("Comment content cannot be empty.")
-        return value
+        content = self.cleaned_data.get("content", "")
+        if len(content.strip()) < 3:
+            raise forms.ValidationError("Comment must be at least 3 characters long.")
+        return content

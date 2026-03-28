@@ -1,21 +1,25 @@
 <form id="post-comment-form" method="POST" action="{% url 'blog:post' post.slug %}">
     {% csrf_token %}
     <fieldset>
-        <legend>Leave a comment</legend>
+        <legend>{{ copy.common_leave_a_comment }}</legend>
 
-        <p id="reply-target-indicator" hidden>
-            <strong id="reply-target-text"></strong>
+        <p id="reply-target-indicator" data-comment-reply-target="indicator" hidden>
+            <span id="reply-target-text" style="font-weight: bold; font-size: small;" data-comment-reply-target="indicatorText"></span>
             <br/>
-            <span id="reply-target-snippet" style="opacity: 0.8;"></span>
-            ·
-            <a id="reply-target-cancel" href="#post-comment-form">Cancel</a>
+            <span style="font-size: medium;">
+                <span id="reply-target-snippet" data-comment-reply-target="indicatorSnippet" style="color: var(--secondary-color)"></span>
+                <span>&nbsp;&middot;&nbsp;</span>
+            </span>
+            <span style="font-size: smaller;">
+                <a id="reply-target-cancel" href="#post-comment-form" data-action="click->comment-reply#clear">{{ copy.common_cancel }}</a>
+            </span>
         </p>
 
         <!-- <div class="form-group">
             <label for="{{ comment_form.name.id_for_label }}">{{ comment_form.name.label }}</label>
             {{ comment_form.name }}
             {% if comment_form.name.errors %}
-            <p style="color: var(--error-color); margin-top: 0.25em;">{{ comment_form.name.errors|join:", " }}</p>
+            <p data-comment-reply-target="errorMessage" style="color: var(--error-color); margin-top: 0.25em;">{{ comment_form.name.errors|join:", " }}</p>
             {% endif %}
         </div> -->
 
@@ -23,7 +27,7 @@
             <label for="{{ comment_form.email.id_for_label }}">{{ comment_form.email.label }}</label>
             {{ comment_form.email }}
             {% if comment_form.email.errors %}
-            <p style="color: var(--error-color); margin-top: 0.25em;">{{ comment_form.email.errors|join:", " }}</p>
+            <p data-comment-reply-target="errorMessage" style="color: var(--error-color); margin-top: 0.25em;">{{ comment_form.email.errors|join:", " }}</p>
             {% endif %}
         </div>
 
@@ -31,7 +35,7 @@
             <label for="{{ comment_form.content.id_for_label }}">{{ comment_form.content.label }}</label>
             {{ comment_form.content }}
             {% if comment_form.content.errors %}
-            <p style="color: var(--error-color); margin-top: 0.25em;">{{ comment_form.content.errors|join:", " }}</p>
+            <p data-comment-reply-target="errorMessage" style="color: var(--error-color); margin-top: 0.25em;">{{ comment_form.content.errors|join:", " }}</p>
             {% endif %}
         </div>
 
@@ -42,41 +46,3 @@
         </div>
     </fieldset>
 </form>
-
-<script>
-    // TODO: move this to stimulus controller
-    (() => {
-        const parentInput = document.getElementById("id_parent");
-        const indicator = document.getElementById("reply-target-indicator");
-        const indicatorText = document.getElementById("reply-target-text");
-        const indicatorSnippet = document.getElementById("reply-target-snippet");
-        const cancel = document.getElementById("reply-target-cancel");
-        const replyLinks = document.querySelectorAll("[data-reply-to]");
-
-        if (!parentInput || !indicator || !indicatorText || !indicatorSnippet || !cancel) {
-            return;
-        }
-
-        const clearReplyTarget = () => {
-            parentInput.value = "";
-            indicatorText.textContent = "";
-            indicatorSnippet.textContent = "";
-            indicator.hidden = true;
-        };
-
-        replyLinks.forEach((link) => {
-            link.addEventListener("click", () => {
-                const replyTo = link.getAttribute("data-reply-to");
-                const replyAuthor = link.getAttribute("data-reply-author") || "this comment";
-                const replySnippet = link.getAttribute("data-reply-snippet") || "";
-
-                parentInput.value = replyTo || "";
-                indicatorText.textContent = `Replying to ${replyAuthor}`;
-                indicatorSnippet.textContent = replySnippet ? `"${replySnippet}"` : "";
-                indicator.hidden = false;
-            });
-        });
-
-        cancel.addEventListener("click", clearReplyTarget);
-    })();
-</script>

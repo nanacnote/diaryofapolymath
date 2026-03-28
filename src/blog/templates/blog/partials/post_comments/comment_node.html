@@ -9,7 +9,9 @@
     <div>
         <div style="font-size: medium;">{{ comment.content|linebreaksbr }}</div>
         <div style="font-size: smaller; margin: 0.25em 0 1.5em 0;">
-            <a href="#post-comment-form" data-reply-to="{{ comment.id }}" data-reply-author="{{ comment.name|default:comment.email|email_to_name }}" data-reply-snippet="{{ comment.content|striptags|truncatechars:80 }}">{{ copy.common_reply }}</a>
+            <a id="comment-node-upvote-{{ comment.id }}" href="#comment-node-upvote-{{ comment.id }}">{{ copy.common_upvote }}</a>
+            <span>&nbsp;&middot;&nbsp;</span>
+            <a href="#post-comment-form" data-action="click->comment-reply#select" data-reply-to="{{ comment.id }}" data-reply-author="{{ comment.name|default:comment.email|email_to_name }}" data-reply-snippet="{{ comment.content|striptags|truncatechars:80 }}">{{ copy.common_reply }}</a>
         </div>
     </div>
 

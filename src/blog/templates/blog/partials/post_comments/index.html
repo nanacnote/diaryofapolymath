@@ -1,7 +1,7 @@
 <div>
     <hr/>
 
-    <section>
+    <section data-controller="comment-reply">
         <header><h2 id="post-comment-section">{{ copy.common_comments }}</h2></header>
 
         {% if comments %}
@@ -20,7 +20,7 @@
         {% endif %}
 
         {% if request.GET.submitted %}
-        <p><strong>{{ copy.common_comment_submitted_message }}</strong></p>
+        <p data-comment-reply-target="submittedMessage"><strong>{{ copy.common_comment_submitted_message }}</strong></p>
         {% endif %}
 
         {% include "blog/partials/post_comments/comment_form.html" %}

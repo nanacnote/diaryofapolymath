@@ -11,7 +11,7 @@ def copy_processor(request):
             "meta_site_description": "A personal knowledge journal and publishing space.",
             "nav_about": "About",
             "nav_blog": "Blog",
-            "nav_exclusive": "Exclusive",
+            "nav_etc": "Etc",
             "common_powered_by": "Powered by",
             "common_tags": "Tags",
             "common_tagged": "Tagged",

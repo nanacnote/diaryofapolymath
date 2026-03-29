@@ -8,7 +8,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("about/", include(("about.urls", "about"), namespace="about")),
     path("blog/", include(("blog.urls", "blog"), namespace="blog")),
-    path("exclusive/", include(("exclusive.urls", "exclusive"), namespace="exclusive")),
+    path("etc/", include(("etc.urls", "etc"), namespace="etc")),
     path("", lambda _: redirect(reverse("blog:index"))),
 ]
 

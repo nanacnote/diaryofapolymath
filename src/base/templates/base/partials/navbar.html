@@ -8,7 +8,7 @@
         {% with base_route_var=request.resolver_match.route %}
         <li><a class="{% if 'about/' in base_route_var %} active {% endif %}" href="{% url 'about:index' %}">{{ copy.nav_about }}</a></li>
         <li><a class="{% if 'blog/' in base_route_var %} active {% endif %}" href="{% url 'blog:index' %}">{{ copy.nav_blog }}</a></li>
-        <li><a class="{% if 'exclusive/' in base_route_var %} active {% endif %}" href="{% url 'exclusive:index' %}">{{ copy.nav_exclusive }}</a></li>
+        <li><a class="{% if 'etc/' in base_route_var %} active {% endif %}" href="{% url 'etc:index' %}">{{ copy.nav_etc }}</a></li>
         {% endwith %}
         <li id="theme-switch-{% if session_theme == 'light' %}dark{% else %}light{% endif %}">
           <a href="?theme={% if session_theme == 'light' %}dark{% else %}light{% endif %}"></a>

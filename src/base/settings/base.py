@@ -18,7 +18,7 @@ EXTERNAL_APPS = []
 LOCAL_APPS = [
     "about",
     "blog",
-    "exclusive",
+    "etc",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + EXTERNAL_APPS + LOCAL_APPS

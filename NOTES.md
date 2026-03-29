@@ -42,6 +42,7 @@ django-admin makemigrations --empty <app> --name <description>
 ```
 
 ### TODO:
+- [ ] Add scroll-to-top button
 - [ ] Add post view count
 - [ ] Add post like feature
 - [ ] Add comment upvote feature
@@ -51,4 +52,7 @@ django-admin makemigrations --empty <app> --name <description>
 - [ ] Add RSS feed css (allowing browsers to render the feed rather than downloading it as a file)
 - [ ] Add newsletter subscription form and functionality
 - [ ] Add sitemap.xml
-- [ ] Addd email verification for comment posting
+- [ ] Add email verification for comment posting
+- [ ] Add a blogroll with links to other blogs
+  - [ ] one for personal currated links
+  - [ ] one for community submitted links

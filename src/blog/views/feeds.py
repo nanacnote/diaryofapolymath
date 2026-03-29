@@ -1,9 +1,13 @@
+import logging
+
 from django.contrib.syndication.views import Feed
 from django.urls import reverse
 from django.utils.feedgenerator import Atom1Feed as AtomFeed
 from django.utils.feedgenerator import Rss201rev2Feed as RssFeed
 
 from ..models import Post
+
+logger = logging.getLogger(__name__)
 
 
 class LatestEntriesFeed(Feed):

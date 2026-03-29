@@ -1,6 +1,10 @@
+import logging
+
 from django.shortcuts import render
 
 from .models import Profile
+
+logger = logging.getLogger(__name__)
 
 
 def index(request):

@@ -25,3 +25,16 @@ DATABASES = {
         "NAME": BASE_DIR / "dev.db.sqlite3",
     }
 }
+
+LOGGING = {
+    **LOGGING,
+    **{
+        "loggers": {
+            "django": {
+                "handlers": ["console"],
+                "level": "INFO",
+                "propagate": False,
+            },
+        },
+    },
+}

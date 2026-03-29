@@ -56,3 +56,5 @@ django-admin makemigrations --empty <app> --name <description>
 - [ ] Add a blogroll with links to other blogs
   - [ ] one for personal currated links
   - [ ] one for community submitted links
+- [ ] Add celery
+  - [ ] move notifications to a background task

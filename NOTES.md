@@ -1,4 +1,4 @@
-Resize an image to a target width while preserving aspect ratio, then convert it to **WebP**:
+### Resize an image to a target width while preserving aspect ratio, then convert it to **WebP**:
 
 ```bash
 ffmpeg -i input.jpg \
@@ -9,7 +9,7 @@ ffmpeg -i input.jpg \
 output.webp
 ```
 
-Crop an image to a square, resize it to a target size, then convert it to **WebP**:
+### Crop an image to a square, resize it to a target size, then convert it to **WebP**:
 
 ```bash
 ffmpeg -i input.jpg \
@@ -20,13 +20,13 @@ ffmpeg -i input.jpg \
 output.webp
 ```
 
-Create and apply Django migrations after modifying the `models.py` file:
+### Create and apply Django migrations after modifying the `models.py` file:
 ```bash
 django-admin makemigrations         # Generate new migration files based on model changes
 django-admin migrate --no-input     # Apply migrations to the database
 ```
 
-Additional useful Django migration commands:
+### Additional useful Django migration commands:
 ```bash
 # Show pending migrations
 django-admin showmigrations
@@ -40,6 +40,9 @@ django-admin migrate <app> <previous_migration_name>
 # Create empty migration for custom SQL
 django-admin makemigrations --empty <app> --name <description>
 ```
+
+### CICD notes:
+- Escape variables in .env files before adding them to GitHub secrets (e.g. `$` becomes `\$`).
 
 ### TODO:
 - [ ] Add scroll-to-top button

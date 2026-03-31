@@ -27,7 +27,15 @@ jobs:
           cat <<EOF > .env
           ${{ secrets.DOTENV_TEST }}
           EOF
+      - name: Cache pip downloads
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt', '**/Pipfile.lock', '**/pyproject.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
       - name: Build test image
+# TODO: look into using buildkit to mount the cache during build
         run: docker build -f Dockerfile.test -t test-image .
       - name: Run tests
         run: docker run --rm test-image

@@ -1,8 +1,14 @@
+import logging
+
 from django.shortcuts import redirect, render
 from django.urls import reverse
 
+from base.integrations.matrix.notifier import notify_new_comment
+
 from ..forms import CommentForm
 from ..models import Comment, Post
+
+logger = logging.getLogger(__name__)
 
 
 def index(request):
@@ -50,3 +56,5 @@ def postCommentPOST(request, slug):
     comment = comment_form.save(commit=False)
     comment.post = Post.objects.get_post_by_slug(slug)
     comment.save()
+
+    notify_new_comment(comment)

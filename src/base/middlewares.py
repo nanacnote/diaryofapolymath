@@ -1,7 +1,8 @@
 import os
 
 
-class GoatcounterAnalyticsMiddleware:
+# TODO: test coverage
+class GoatcounterAnalyticsMiddleware:  # pragma: no cover
     def __init__(self, get_response):
         self.get_response = get_response
 

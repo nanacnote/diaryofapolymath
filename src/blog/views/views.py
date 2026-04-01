@@ -11,6 +11,7 @@ from ..models import Comment, Post
 logger = logging.getLogger(__name__)
 
 
+# TODO: gracefully handle slug not found (404) and other errors (500)
 def index(request):
     posts = Post.objects.get_published_posts()
     tags = Post.objects.group_posts_by_tag_with_count()

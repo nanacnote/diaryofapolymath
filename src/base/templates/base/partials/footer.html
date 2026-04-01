@@ -1,36 +1,47 @@
 <section>
     <hr/>
-    <div style="display:flex; flex-wrap: wrap;">
-      <span>
-        <span>©2020-{% now "Y" %}</span>
-        <span>&nbsp;|&nbsp;</span>
-        <span>
-          <a href="https://creativecommons.org/publicdomain/zero/1.0/" target="_blank" rel="noopener noreferrer">CC0 1.0 Universal</a>
-        </span>
-      </span>
-      <span style="flex: 1; padding: 1em 0;"></span>
-      <span>
-        <span>
-          <a href="{% url 'blog:rss' %}" target="_blank" rel="noopener noreferrer">RSS</a>
-        </span>
-        <span>&nbsp;|&nbsp;</span>
-        <span>
-          <a href="{% url 'blog:atom' %}" target="_blank" rel="noopener noreferrer">Atom</a>
-        </span>
-        <span>&nbsp;|&nbsp;</span>
-        <span>
-          <a href="https://github.com/nanacnote/diaryofapolymath" target="_blank" rel="noopener noreferrer">Codebase</a>
-        </span>
-        <span>&nbsp;|&nbsp;</span>
-        <span>
-          <span>{{ copy.common_powered_by }}</span>
-          <span>&nbsp;</span>
+    <div style="display:flex; flex-wrap: wrap-reverse; justify-content: space-between; gap: 1em;">
+      <div>
+        <div>
+          <span>©2020-{% now "Y" %}</span>
+          <span>&nbsp;|&nbsp;</span>
           <span>
-            <a href="https://www.djangoproject.com/" target="_blank" rel="noopener noreferrer">django</a>
+            <a href="https://creativecommons.org/publicdomain/zero/1.0/" target="_blank" rel="noopener noreferrer">CC0 1.0 Universal</a>
           </span>
-        </span>
-      </span>
-
+        </div>
+        <div>
+          <span>
+            <span style="font-weight:900">{{ copy.common_powered_by }}</span>
+            <span>&nbsp;</span>
+            <span>
+              <a href="https://www.djangoproject.com/" target="_blank" rel="noopener noreferrer">django</a>
+            </span>
+          </span>
+        </div>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; flex-direction: row; justify-content: space-between; width: min(100%, calc(var(--page-width)/3));">
+        <div style="display: flex; flex-direction: column; align-items: flex-start">
+          <span>
+            <a href="{% url 'blog:rss' %}">RSS</a>
+          </span>
+          <span>
+            <a href="{% url 'blog:atom' %}">Atom</a>
+          </span>
+          <span>
+            <a href="https://github.com/nanacnote/diaryofapolymath" target="_blank" rel="noopener noreferrer">{{ copy.footer_codebase }}</a>
+          </span>
+          <span>
+            <a href="#TODO">{{ copy.footer_newsletter }}</a>
+          </span>
+        </div>
+        <div style="display: flex; flex-direction: column; align-items: flex-start">
+          <span><a href="#TODO">{{ copy.footer_blogroll }}</a></span>
+          <span><a href="/admin/" target="_blank" rel="noopener noreferrer">{{ copy.footer_admin }}</a></span>
+          <span><a href="//analytics.doap.metal.bohyen.space" target="_blank" rel="noopener noreferrer">{{ copy.footer_analytics }}</a></span>
+          <span><a href="#TODO">{{ copy.footer_metrics }}</a></span>
+          <span><a href="#TODO">{{ copy.footer_sitemap }}</a></span>
+        </div>
+      </div>
     </div>
     <hr style="opacity: 0; margin-bottom: 0;"/>
 </section>

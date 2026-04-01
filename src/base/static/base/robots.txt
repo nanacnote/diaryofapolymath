@@ -1,0 +1,11 @@
+# robots.txt for diaryofapolymath
+# Allow all search engines to crawl everything except admin and base files
+
+User-agent: *
+Disallow: /admin/
+Disallow: /base/
+
+# Allow everything else
+Allow: /
+
+# Sitemap: https://doap.metal.bohyen.space/sitemap.xml

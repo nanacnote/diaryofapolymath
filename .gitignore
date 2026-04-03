@@ -21,6 +21,7 @@ coverage.xml
 *.pyc
 **/__pycache__/
 
+**/dev.db.queries.sql
 **/*.sqlite3
 notes.txt
 

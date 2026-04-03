@@ -1,64 +1,61 @@
-import asyncio
 import logging
 import os
-from concurrent.futures import ThreadPoolExecutor
-from threading import BoundedSemaphore
+from configparser import ConfigParser
 
+from asgiref.sync import async_to_sync
+from celery import shared_task
 from mautrix.client import Client
 from mautrix.types import RoomID
 
 logger = logging.getLogger(__name__)
 
-# Module-level thread pool shared across all MatrixNotifier instances
-_EXECUTOR = ThreadPoolExecutor(max_workers=3)
-_PENDING_SLOTS = BoundedSemaphore(100)
 
-
-# TODO: test coverage
 class MatrixNotifier:  # pragma: no cover
     def __init__(self):
-        self.base_url = os.environ.get("MATRIX_BASE_URL")
-        self.access_token = os.environ.get("MATRIX_ACCESS_TOKEN")
-        self.room_id = os.environ.get("MATRIX_ROOM_ID")
+        self._enabled = bool(
+            ConfigParser.BOOLEAN_STATES[
+                os.environ.get("MATRIX_NOTIFIER_ENABLED", "true").strip().lower()
+            ]
+        )
+        self._base_url = (os.environ.get("MATRIX_BASE_URL") or "").strip()
+        self._access_token = (os.environ.get("MATRIX_ACCESS_TOKEN") or "").strip()
+        self._room_id = (os.environ.get("MATRIX_ROOM_ID") or "").strip()
 
-        if not all([self.base_url, self.access_token, self.room_id]):
-            raise RuntimeError("MatrixNotifier missing required environment variables!")
+        if self._enabled and not all([self._base_url, self._access_token, self._room_id]):
+            raise RuntimeError(
+                "Matrix notifier is enabled but one or more required environment variables are "
+                "missing: MATRIX_BASE_URL, MATRIX_ACCESS_TOKEN, MATRIX_ROOM_ID"
+            )
 
     def send(self, message):
-        if not _PENDING_SLOTS.acquire(blocking=False):
-            logger.warning("Dropping Matrix notification: pending queue is full")
-            return
+        if not self._enabled:
+            logger.debug("Matrix notifier is disabled; skipping message send")
+            return False
+        return async_to_sync(self.send_async)(message)
 
-        async def _send_async():
-            client = Client(base_url=self.base_url, token=self.access_token)
-            await client.send_text(RoomID(str(self.room_id)), message)
+    async def send_async(self, message):
+        if not self._enabled:
+            return False
 
-        def _runner():
-            asyncio.run(_send_async())
-
+        client = Client(base_url=self._base_url, token=self._access_token)
         try:
-            future = _EXECUTOR.submit(_runner)
-        except Exception:
-            _PENDING_SLOTS.release()
-            raise
-
-        def _on_done(done_future):
-            _PENDING_SLOTS.release()
-            exc = done_future.exception()
-            if exc is not None:
-                logger.exception(f"Failed to send Matrix notification: {exc}")
-
-        future.add_done_callback(_on_done)
+            await client.send_text(RoomID(self._room_id), message)
+        finally:
+            await client.api.session.close()
+        return True
 
 
-def notify_new_comment(comment):  # pragma: no cover
-    """Send a Matrix notification for a new comment"""
-    if os.environ.get("APP_ENV") == "production":
-        try:
-            MatrixNotifier().send(
-                f"New comment by \n"
-                f"{comment.name or comment.email}: \n"
-                f"{comment.content[:255]}"
-            )
-        except Exception:
-            logger.exception("Failed to send Matrix comment notification")
+@shared_task(autoretry_for=(Exception,), max_retries=2, retry_backoff=True)
+def notify_new_comment(comment_id):  # pragma: no cover
+    """Send a Matrix notification for a newly created comment."""
+    from blog.models import Comment
+
+    try:
+        comment = Comment.objects.get(pk=comment_id)
+    except Comment.DoesNotExist:
+        logger.warning(f"notify_new_comment: comment {comment_id} not found")
+        return
+
+    commenter = (comment.name or comment.email or "Unknown").strip()
+    content = (comment.content or "").strip()
+    MatrixNotifier().send(f"New comment received\nAuthor: {commenter}\nMessage: {content}")

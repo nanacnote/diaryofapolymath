@@ -27,3 +27,5 @@ DATABASES = {
         "PORT": os.environ.get("DATABASE_PORT"),
     }
 }
+
+CELERY_TASK_ALWAYS_EAGER = False

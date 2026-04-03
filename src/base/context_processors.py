@@ -1,3 +1,6 @@
+import os
+
+
 def session_theme_processor(request):
     color_scheme = getattr(request, "color_scheme", "light")
     session_theme = request.session.get("theme", color_scheme)
@@ -7,8 +10,8 @@ def session_theme_processor(request):
 def copy_processor(request):
     return {
         "copy": {
-            "meta_site_name": "Diary of a Polymath",
-            "meta_site_description": "A personal knowledge journal and publishing space.",
+            "meta_site_name": os.environ["SITE_NAME"],
+            "meta_site_description": os.environ["SITE_DESCRIPTION"],
             "nav_about": "About",
             "nav_blog": "Blog",
             "nav_etc": "Etc",

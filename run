@@ -10,6 +10,7 @@ LOG_FILE=./local.dev.log
 PID_FILE=./local.dev.pid
 DJANGO_PID=
 VITE_PID=
+CELERY_PID=
 
 show_help() {
   cat <<-EOF
@@ -52,6 +53,7 @@ cleanup() {
   echo "Attempting graceful shutdown"
   graceful_stop "$DJANGO_PID" "Django"
   graceful_stop "$VITE_PID" "Vite"
+  graceful_stop "$CELERY_PID" "Celery"
   rm -f "$PID_FILE"
   rm -f "$LOG_FILE"
 }
@@ -61,6 +63,7 @@ write_pid_file() {
   {
     echo "DJANGO_PID=$DJANGO_PID"
     echo "VITE_PID=$VITE_PID"
+    echo "CELERY_PID=$CELERY_PID"
   } >"$PID_FILE"
   echo "Saved process IDs to $PID_FILE"
 }
@@ -73,11 +76,13 @@ stop_dev_servers() {
 
   DJANGO_PID=
   VITE_PID=
+  CELERY_PID=
   . "$PID_FILE"
 
   echo "Stopping processes listed in $PID_FILE"
   graceful_stop "${DJANGO_PID:-}" "Django"
   graceful_stop "${VITE_PID:-}" "Vite"
+  graceful_stop "${CELERY_PID:-}" "Celery"
   rm -f "$PID_FILE"
   rm -f "$LOG_FILE"
   echo "Cleanup complete"
@@ -141,6 +146,12 @@ start_vite_dev_server() {
   VITE_PID=$!
 }
 
+start_celery_worker() {
+  require_command celery
+  celery --app base worker --beat --pool=solo --concurrency=1 --loglevel=INFO >>"$LOG_FILE" 2>&1 &
+  CELERY_PID=$!
+}
+
 command_name="${1:-}"
 [ -n "$command_name" ] || show_help
 shift || true
@@ -155,6 +166,7 @@ case "$command_name" in
     setup_django_db
     start_django_dev_server
     start_vite_dev_server
+    start_celery_worker
     write_pid_file
     echo "Use '$0 stop:dev' to stop these processes from another terminal."
     tail -f "$LOG_FILE"

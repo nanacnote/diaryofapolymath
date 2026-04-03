@@ -3,8 +3,6 @@ import logging
 from django.shortcuts import redirect, render
 from django.urls import reverse
 
-from base.integrations.matrix.notifier import notify_new_comment
-
 from ..forms import CommentForm
 from ..models import Comment, Post
 
@@ -20,9 +18,11 @@ def index(request):
 
 
 def post(request, slug):
-    comment_form = CommentForm()
-
-    if request.method == "POST" and not (comment_form := postCommentPOST(request, slug)):
+    comment_form = CommentForm(request.POST or None)
+    if request.method == "POST" and comment_form.is_valid():
+        comment = comment_form.save(commit=False)
+        comment.post = Post.objects.get_post_by_slug(slug)
+        comment.save()
         return redirect(f"{reverse('blog:post', kwargs={'slug': slug})}?submitted=1")
 
     (post, prev, next) = Post.objects.get_current_prev_next_posts(slug)
@@ -44,18 +44,3 @@ def tag(request, slug):
     archives = Post.objects.group_posts_by_year_with_count()
     tags = Post.objects.group_posts_by_tag_with_count()
     return render(request, "blog/tag.html", locals())
-
-
-# ---------
-# POST HANDLERS
-# ---------
-def postCommentPOST(request, slug):
-    comment_form = CommentForm(request.POST)
-    if not comment_form.is_valid():
-        return comment_form
-
-    comment = comment_form.save(commit=False)
-    comment.post = Post.objects.get_post_by_slug(slug)
-    comment.save()
-
-    notify_new_comment(comment)

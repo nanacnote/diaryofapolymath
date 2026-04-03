@@ -15,6 +15,8 @@ export default defineConfig(({ command, mode }) => {
     },
     define: {
       __APP_ENV__: env.APP_ENV,
+      __SITE_NAME__: env.SITE_NAME,
+      __SITE_DESCRIPTION__: env.SITE_DESCRIPTION,
     },
   };
 });

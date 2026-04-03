@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -13,12 +14,15 @@ DJANGO_APPS = [
     "django.contrib.syndication",
 ]
 
-EXTERNAL_APPS = []
+EXTERNAL_APPS = [
+    "django_celery_beat",
+    "django_celery_results",
+]
 
 LOCAL_APPS = [
-    "about",
-    "blog",
-    "etc",
+    "about.apps.AboutConfig",
+    "blog.apps.BlogConfig",
+    "etc.apps.EtcConfig",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + EXTERNAL_APPS + LOCAL_APPS
@@ -81,14 +85,24 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "about.Profile"
 
 SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
-SESSION_COOKIE_AGE = 1209600  # Two weeks in seconds
+SESSION_COOKIE_AGE = 60 * 60 * 24 * 7 * 2  # Two weeks in seconds
+
+# memory:// is a safe fallback so Celery doesn't error on startup looking for a real broker.
+# In dev it's never actually reached because ALWAYS_EAGER runs tasks inline.
+# In tests it would work (pytest is single-process), but ALWAYS_EAGER skips it there too.
+# Prod must override CELERY_BROKER_URL via env.
+CELERY_TASK_ALWAYS_EAGER = True
+CELERY_RESULT_BACKEND = "django-db"
+CELERY_RESULT_EXTENDED = True
+CELERY_RESULT_EXPIRES = 60 * 60 * 24 * 7 * 2  # Two weeks in seconds
+CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL", "memory://")
 
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
     "formatters": {
         "standard": {
-            "format": "%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+            "format": "%(asctime)s [%(levelname)s] [%(threadName)s] %(name)s: %(message)s",
         },
     },
     "handlers": {

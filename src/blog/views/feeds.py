@@ -1,4 +1,5 @@
 import logging
+import os
 
 from django.contrib.syndication.views import Feed
 from django.urls import reverse
@@ -11,9 +12,8 @@ logger = logging.getLogger(__name__)
 
 
 class LatestEntriesFeed(Feed):
-    # TODO: find a way to get this from the context processor instead of hardcoding it here
-    title = "Diary of a Polymath"
-    description = "A personal knowledge journal and publishing space."
+    title = os.environ["SITE_NAME"]
+    description = os.environ["SITE_DESCRIPTION"]
 
     @property
     def link(self):

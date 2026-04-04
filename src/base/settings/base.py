@@ -95,7 +95,7 @@ CELERY_TASK_ALWAYS_EAGER = True
 CELERY_RESULT_BACKEND = "django-db"
 CELERY_RESULT_EXTENDED = True
 CELERY_RESULT_EXPIRES = 60 * 60 * 24 * 7 * 2  # Two weeks in seconds
-CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL", "memory://")
+CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL") or "memory://"
 
 LOGGING = {
     "version": 1,
